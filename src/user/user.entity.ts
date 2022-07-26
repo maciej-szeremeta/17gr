@@ -16,7 +16,7 @@ export class User extends BaseEntity {
      email: string;
 
    @Column({ length:60, })
-     pwd: string;
+     pwd: string | null;
 
    // uuid
    @Column({ type:'uuid', default:null, length:36, })
