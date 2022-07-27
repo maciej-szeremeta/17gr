@@ -3,6 +3,7 @@ import { BaseEntity, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, U
 
 @Entity('users')
 export class User extends BaseEntity implements UserItem{
+
    @PrimaryGeneratedColumn('uuid')
      id: string;
 
@@ -26,6 +27,7 @@ export class User extends BaseEntity implements UserItem{
     default: false, })
     isActive: boolean;
 
+
   @CreateDateColumn()
     createdAt: Date;
    
@@ -36,4 +38,5 @@ export class User extends BaseEntity implements UserItem{
   role: string;
 
   // TODO: Sprawdzić czy email jest unique
+
 }
