@@ -7,7 +7,7 @@ export const config = {
   username: 'm1640_grupa17',
   password: 'BaixQ4hHY4Yk.7+5?Qfg5EETRB}S5S',
   database: 'm1640_nest',
-  entities: [ 'dist/**/**.entity{.ts,.js}', ],
+  entities: [ __dirname + '/**/**.entity{.ts,.js}', ],
   bigNumberStrings: false,
   logging: true,
   synchronize: true,
