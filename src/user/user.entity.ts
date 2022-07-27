@@ -27,7 +27,6 @@ export class User extends BaseEntity implements UserItem{
     default: false, })
     isActive: boolean;
 
-
   @CreateDateColumn()
     createdAt: Date;
    
