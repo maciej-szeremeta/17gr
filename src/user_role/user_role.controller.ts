@@ -1,27 +1,29 @@
-import { Body, Controller, Get, Param, Post, } from '@nestjs/common';
-import { UserRoleDto, } from './dto/user_role.dto';
+import { Controller, Get, Inject, Param, Post, } from '@nestjs/common';
+import { CreateUserRoleRes, GetListOfUserRolesRes, UserRoleRes, } from '../interface/user-role';
+import { UserRoleService, } from './user_role.service';
 
 @Controller('/user-role')
 export class UserRoleController {
+  constructor(@Inject(UserRoleService) private userRoleService: UserRoleService) {}
 
   // * POST - Create a New user_role
   // @ Admin
   @Post('/')
-  createUserRole(@Body()createUserRole:UserRoleDto):string {
-    return `create user role ${createUserRole.type}`;
+  createNewUserRole(): Promise<CreateUserRoleRes> {
+    return this.userRoleService.createUserRole();
   }
 
   // * GET One User Role
   // @ Admin
   @Get('/:id')
-  getOneUserRole(@Param('id')id: string): string { 
-    return `get one user role id ${id}`;
+  getOneUserRole(@Param('id')id: string): Promise<UserRoleRes> { 
+    return this.userRoleService.getOneUserRole(id);
   }
 
   // * GET All User Role
   // @ Admin
   @Get('/')
-  getListUserRole(): string { 
-    return 'get all user role';
+  getListUserRole(): Promise<GetListOfUserRolesRes> { 
+    return this.userRoleService.getAllUserRoles();
   }
 }
