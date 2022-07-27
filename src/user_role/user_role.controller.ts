@@ -1,4 +1,5 @@
-import { Controller, Get, Param, Post, } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, } from '@nestjs/common';
+import { UserRoleDto, } from './dto/user_role.dto';
 
 @Controller('/user-role')
 export class UserRoleController {
@@ -6,8 +7,8 @@ export class UserRoleController {
   // * POST - Create a New user_role
   // @ Admin
   @Post('/')
-  createUserRole():string {
-    return 'create user role';
+  createUserRole(@Body()createUserRole:UserRoleDto):string {
+    return `create user role ${createUserRole.type}`;
   }
 
   // * GET One User Role
