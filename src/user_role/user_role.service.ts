@@ -20,8 +20,6 @@ export class UserRoleService {
   }
 
   async getAllUserRoles(): Promise<GetListOfUserRolesRes> {
-
-    // return await this.shopItemRepository.find();  // ! REPOSITORY
     return await UserRole.find();
   }
 }
