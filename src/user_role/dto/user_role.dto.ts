@@ -1,5 +1,5 @@
 import { UserRoleEnum, } from '../../interface/user-role';
-import { IsNotEmpty, Length, IsEnum } from 'class-validator';
+import { IsNotEmpty, Length, IsEnum, } from 'class-validator';
 import { config, } from '../../app.utils';
 
 export class UserRoleDto{
