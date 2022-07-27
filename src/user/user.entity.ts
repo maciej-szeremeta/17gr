@@ -1,5 +1,6 @@
-import { UserItem, } from '../interfaces/user';
-import { BaseEntity, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn, } from 'typeorm';
+import { UserItem, } from '../interface/user';
+import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn, } from 'typeorm';
+import { UserRole, } from '../user_role/user_role.entity';
 
 @Entity('users')
 export class User extends BaseEntity implements UserItem{
@@ -27,14 +28,18 @@ export class User extends BaseEntity implements UserItem{
     default: false, })
     isActive: boolean;
 
+ @ManyToOne(
+   () => 
+     UserRole, userRole => 
+     userRole.user
+ )
+   role: UserRole[];
+
   @CreateDateColumn()
     createdAt: Date;
    
   @UpdateDateColumn()
     updateAt: Date;
-
-  // TODO: Dodać relacje z tabelą user_role
-  role: string;
 
   // TODO: Sprawdzić czy email jest unique
 
