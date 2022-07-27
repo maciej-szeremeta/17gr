@@ -1,10 +1,5 @@
+import { UserRole, } from '../interface/user-role';
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn, } from 'typeorm';
-
-enum UserRole {
-  ADMIN = 'admin',
-  STUDENT = 'student',
-  HR = 'hr'
-}
 
 @Entity()
 export class User extends BaseEntity {
@@ -16,7 +11,7 @@ export class User extends BaseEntity {
      email: string;
 
    @Column({ length:60, })
-     pwd: string;
+     pwd: string | null;
 
    // uuid
    @Column({ type:'uuid', default:null, length:36, })
@@ -34,4 +29,10 @@ export class User extends BaseEntity {
      default: UserRole.STUDENT,
    })
      role: string;
+
+     @Column({
+       default:() => 
+         'CURRENT_TIMESTAMP',
+     })
+       createdAt: Date;
 }
