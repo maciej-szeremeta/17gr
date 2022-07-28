@@ -23,4 +23,9 @@ export class UserRoleService {
   async getAllUserRoles(): Promise<GetListOfUserRolesRes> {
     return await UserRole.find();
   }
+
+  async hasUserRole(type: string): Promise<boolean> {
+    return (await this.getAllUserRoles()).some(role => 
+      role.type === type);
+  }
 }

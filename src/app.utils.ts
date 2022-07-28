@@ -5,6 +5,8 @@ export const config = {
   message: {
     notEmpty: 'Pole nie może być puste',
     length:'Zła długość pola',
+    string: 'Pole powinno być tekstem',
+    enum:'Musi zwierać opcje z listy',
     password:'Hasło powinno zawierać jedną dużą przynajmniej jedna mała liter oraz znak specjalny',
   },
 };

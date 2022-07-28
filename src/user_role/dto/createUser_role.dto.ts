@@ -1,10 +1,11 @@
 import { UserRoleEnum, } from '../../interface/user-role';
-import { IsNotEmpty, Length, IsEnum, } from 'class-validator';
+import { IsNotEmpty, Length, IsEnum, IsString, } from 'class-validator';
 import { config, } from '../../app.utils';
 
-export class UserRoleDto{
+export class createUserRoleDto{
    @IsNotEmpty({ message:config.message.notEmpty, })
    @Length(2, 7, { message: config.message.length, })
-   @IsEnum(UserRoleEnum)
-     type:UserRoleEnum;
+   @IsString({ message:config.message.string, })
+   @IsEnum(UserRoleEnum, { message: config.message.enum, groups: [ 'admin', 'student', 'hr', ], each: true, always: true, })
+     type: UserRoleEnum;
 }
