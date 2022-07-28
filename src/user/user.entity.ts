@@ -1,5 +1,5 @@
 import { UserItem, } from '../interface/user';
-import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn, } from 'typeorm';
+import { BaseEntity, Column, CreateDateColumn, Entity, JoinTable, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn, } from 'typeorm';
 import { UserRole, } from '../user_role/user_role.entity';
 
 @Entity('users')
@@ -33,6 +33,7 @@ export class User extends BaseEntity implements UserItem{
      UserRole, userRole => 
      userRole.user
  )
+   @JoinTable()
    role: UserRole[];
 
   @CreateDateColumn()

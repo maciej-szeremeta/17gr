@@ -1,4 +1,4 @@
-import { Controller, Get, Inject, Param, Post, } from '@nestjs/common';
+import { Body, Controller, Get, Inject, Param, Post, } from '@nestjs/common';
 import { CreateUserRoleRes, GetListOfUserRolesRes, UserRoleRes, } from '../interface/user-role';
 import { UserRoleService, } from './user_role.service';
 
@@ -9,8 +9,8 @@ export class UserRoleController {
   // * POST - Create a New user_role
   // @ Admin
   @Post('/')
-  createNewUserRole(): Promise<CreateUserRoleRes> {
-    return this.userRoleService.createUserRole();
+  createNewUserRole(@Body()user:CreateUserRoleRes): Promise<CreateUserRoleRes> {
+    return this.userRoleService.createUserRole(user);
   }
 
   // * GET One User Role

@@ -1,13 +1,14 @@
+import { CreateUserRoleRes, } from './../interface/user-role';
 import { Injectable, } from '@nestjs/common';
-import { GetListOfUserRolesRes, UserRoleEnum, UserRoleItem, } from '../interface/user-role';
+import { GetListOfUserRolesRes, UserRoleItem, } from '../interface/user-role';
 import { UserRole, } from './user_role.entity';
 
 @Injectable()
 export class UserRoleService {
 
-  async createUserRole(): Promise<UserRoleItem> {
+  async createUserRole(user:CreateUserRoleRes): Promise<UserRoleItem> {
     const newUserRole = new UserRole();
-    newUserRole.type = UserRoleEnum.STUDENT;
+    newUserRole.type = user.type;
 
     await newUserRole.save();
     return newUserRole;
