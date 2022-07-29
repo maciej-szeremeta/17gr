@@ -8,7 +8,7 @@ export interface UserRoleItem{
   type:UserRoleEnum
 };
 
-export type CreateUserRoleRes = UserRoleItem;
+export type CreateUserRoleRes = UserRoleItem|string;
 
 export type UserRoleRes = UserRoleItem;
 
