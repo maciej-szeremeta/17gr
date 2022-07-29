@@ -8,7 +8,7 @@ export class UserRole extends BaseEntity implements UserRoleItem{
    @PrimaryGeneratedColumn('uuid')
      id: string;
 
-   @Column({ length:6, unique:true, })
+   @Column({ length:6, })
      type: UserRoleEnum;
 
      @CreateDateColumn()
