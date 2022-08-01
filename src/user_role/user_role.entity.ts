@@ -1,4 +1,4 @@
-import { UserRoleEnum, UserRoleItem, } from '../interface/user-role';
+import { UserRoleEnum, UserRoleItem, } from '../interface/user_role';
 import { BaseEntity, Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn, } from 'typeorm';
 import { User, } from '../user/user.entity';
 

@@ -1,4 +1,4 @@
-import { UserRoleEnum, } from '../../interface/user-role';
+import { UserRoleEnum, } from '../../interface/user_role';
 import { IsNotEmpty, Length, IsEnum, IsString, } from 'class-validator';
 import { config, } from '../../app.utils';
 
