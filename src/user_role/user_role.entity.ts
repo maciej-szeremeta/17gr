@@ -10,6 +10,9 @@ export class UserRole extends BaseEntity implements UserRoleItem{
 
    @Column({ length:6, })
      type: UserRoleEnum;
+  
+  @Column()
+    createdBy:string;
 
      @CreateDateColumn()
        createdAt: Date;

@@ -35,6 +35,9 @@ export class User extends BaseEntity implements UserEntity{
  )
    @JoinColumn()
    role: UserRole[];
+  
+  @Column()
+    createdBy: string;
 
   @CreateDateColumn()
     createdAt: Date;
