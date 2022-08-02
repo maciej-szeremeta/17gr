@@ -1,6 +1,7 @@
 export interface UserEntity {
+   id: string;
    email: string;
-   pwd: string | null;
-   registerToken: string | null;
-   isActive: boolean;
+   pwdHash: string;
+   currentTokenId: string | null
+   createdBy:string
 }

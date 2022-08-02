@@ -14,14 +14,14 @@ export class User extends BaseEntity implements UserEntity{
   @Column({
     length: 60,
   })
-    pwd: string | null;
+    pwdHash: string | null;
 
   @Column({
     type: 'uuid',
     default: null,
     length: 36,
   })
-    registerToken: string | null;
+    currentTokenId: string | null;
    
   @Column({ type: 'tinyint',
     default: false, })
@@ -36,7 +36,7 @@ export class User extends BaseEntity implements UserEntity{
    role: UserRole[];
   
   @Column({ length:36, })
-    createdBy: string;
+    createdBy: string | null;
 
   @CreateDateColumn()
     createdAt: Date;
