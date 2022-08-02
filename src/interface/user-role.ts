@@ -4,12 +4,13 @@ export enum UserRoleEnum {
   HR = 'hr'
 };
 
-export interface UserRoleItem{
-  type:UserRoleEnum
+export interface UserRoleEntity{
+  id:string
+  type: string
 };
 
-export type CreateUserRoleRes = UserRoleItem|string;
+export type CreateUserRoleRes = UserRoleEntity|string;
 
-export type UserRoleRes = UserRoleItem;
+export type UserRoleRes = UserRoleEntity;
 
-export type GetListOfUserRolesRes = UserRoleItem[]
+export type GetListOfUserRolesRes = UserRoleEntity[];
