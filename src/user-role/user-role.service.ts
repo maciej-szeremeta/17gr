@@ -1,6 +1,6 @@
 import { CreateUserRoleRes, } from '../interface/user-role';
 import { ConflictException, Injectable, NotFoundException, } from '@nestjs/common';
-import { GetListOfUserRolesRes, UserRoleItem, } from '../interface/user-role';
+import { GetListOfUserRolesRes, UserRoleEntity, } from '../interface/user-role';
 import { UserRole, } from './entities/user-role.entity';
 import { createUserRoleDto, } from './dto/create-user-role.dto';
 import { config, } from '../app.utils';
@@ -20,9 +20,9 @@ export class UserRoleService {
     return newUserRole;
   }
    
-  async getOneUserRole(id: string): Promise<UserRoleItem> {
+  async getOneUserRole(type: string): Promise<UserRoleEntity> {
     return await UserRole.findOneByOrFail({
-      id,
+      type,
     });
   }
 

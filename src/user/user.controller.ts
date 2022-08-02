@@ -1,4 +1,18 @@
-import { Controller, } from '@nestjs/common';
+import { Body, Controller, Post, } from '@nestjs/common';
+import { UserRegisterRes } from '../interface/user';
+import { RegisterUserDto, } from './dto/register-user.dto';
+import { UserService, } from './user.service';
 
 @Controller('/user')
-export class UserController {}
+export class UserController {
+
+  constructor(private readonly userService: UserService) { }
+   
+  // !!! Delete After Create Admin Action!!!
+    @Post('/register-admin')
+  async createAdmin(
+    @Body() createUser: RegisterUserDto
+  ): Promise<UserRegisterRes> {
+    return this.userService.registerAdmin(createUser);
+  }
+}

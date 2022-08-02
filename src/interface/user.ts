@@ -3,5 +3,11 @@ export interface UserEntity {
    email: string;
    pwdHash: string;
    currentTokenId: string | null
-   createdBy:string
+   createdBy: string
 }
+
+export type UserRegisterRes = Pick<UserEntity, 'id' | 'email'>;
+
+export type GetOneUserRes = UserEntity | null;
+
+export type GetAllUsersRes = UserEntity[];

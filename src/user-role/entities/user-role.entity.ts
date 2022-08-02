@@ -1,16 +1,17 @@
-import { UserRoleEnum, UserRoleItem, } from '../../interface/user-role';
 import { BaseEntity, Column, CreateDateColumn, Entity, Generated, OneToMany, PrimaryColumn, UpdateDateColumn, } from 'typeorm';
 import { User, } from '../../user/entities/user.entity';
 
 @Entity()
-export class UserRole extends BaseEntity implements UserRoleItem{
+export class UserRole extends BaseEntity{
 
   @Column({ type:'uuid', })
   @Generated('uuid')
+
+  // @PrimaryGeneratedColumn('uuid')
     id: string;
 
   @PrimaryColumn({ length: 7, })
-    type: UserRoleEnum;
+    type: string;
   
   @Column({ length:36, nullable:true, default:null, })
     createdBy:string | null;
@@ -26,6 +27,6 @@ export class UserRole extends BaseEntity implements UserRoleItem{
       User, user => 
       user.role
   )
-    user: User;
+    typeRole: User[];
 
 }

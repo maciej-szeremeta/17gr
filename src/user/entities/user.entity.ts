@@ -1,9 +1,8 @@
-import { UserEntity, } from '../../interface/user';
 import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn, } from 'typeorm';
 import { UserRole, } from '../../user-role/entities/user-role.entity';
 
 @Entity()
-export class User extends BaseEntity implements UserEntity{
+export class User extends BaseEntity{
 
    @PrimaryGeneratedColumn('uuid')
      id: string;
@@ -14,7 +13,7 @@ export class User extends BaseEntity implements UserEntity{
   @Column({
     length: 60,
   })
-    pwdHash: string | null;
+    pwdHash: string;
 
   @Column({
     type: 'uuid',
@@ -30,10 +29,10 @@ export class User extends BaseEntity implements UserEntity{
  @ManyToOne(
    () => 
      UserRole, userRole => 
-     userRole.user
+     userRole.typeRole
  )
-   @JoinColumn()
-   role: UserRole[];
+ @JoinColumn()
+   role: UserRole;
   
   @Column({ length:36, })
     createdBy: string | null;
