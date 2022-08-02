@@ -1,7 +1,12 @@
-import { Body, Controller, Get, Inject, Param, Post, UsePipes, ValidationPipe, } from '@nestjs/common';
-import { CreateUserRoleRes, GetListOfUserRolesRes, UserRoleRes, } from '../interface/user-role';
+import { Body, Controller, Get, Inject, Param, Post, UseGuards, UsePipes, ValidationPipe, } from '@nestjs/common';
+import { AuthGuard, } from '@nestjs/passport';
+import { UserObj, } from '../decorators/user-obj.decorator';
+import { Roles, } from '../decorators/roles.decorator';
+import { RolesGuard, } from '../guards/roles.guard';
+import { CreateUserRoleRes, GetListOfUserRolesRes, UserRoleEnum, UserRoleRes, } from '../interface/user-role';
 import { createUserRoleDto, } from './dto/create-user-role.dto';
 import { UserRoleService, } from './user-role.service';
+import { User, } from '../user/entities/user.entity';
 
 @Controller('/user-role')
 export class UserRoleController {
@@ -11,13 +16,19 @@ export class UserRoleController {
   // @ Admin
   @Post('/')
   @UsePipes(ValidationPipe)
-  createNewUserRole(@Body()user:createUserRoleDto): Promise<CreateUserRoleRes> {
-    return this.userRoleService.createUserRole(user);
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles(UserRoleEnum.ADMIN)
+  createNewUserRole(
+    @Body() newUser: createUserRoleDto,
+    @UserObj() user: User): Promise<CreateUserRoleRes> {
+    return this.userRoleService.createUserRole(newUser, user);
   }
 
   // * GET One User Role
   // @ Admin
   @Get('/:id')
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles(UserRoleEnum.ADMIN)
   getOneUserRole(@Param('id')id: string): Promise<UserRoleRes> { 
     return this.userRoleService.getOneUserRole(id);
   }
@@ -25,6 +36,8 @@ export class UserRoleController {
   // * GET All User Role
   // @ Admin
   @Get('/')
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles(UserRoleEnum.ADMIN)
   getListUserRole(): Promise<GetListOfUserRolesRes> { 
     return this.userRoleService.getAllUserRoles();
   }

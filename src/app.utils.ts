@@ -16,6 +16,13 @@ export const config = {
     unique:[ 'Wybrana nazwa jest już zajęta. Wybierz inna nazwę', 'The selected name is already taken. Please choose another name', ],
   },
   messageErr: {
-    
+    login:[ 'Błędne dane logowania!', 'Invalid login data!', ],
+  },
+  secretKeys: {
+    jwt: 'tajemniczy kluczyk',
+  },
+  configDomain:{
+    domena: 'localhost',
+    secure: false,
   },
 };
