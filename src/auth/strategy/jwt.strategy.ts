@@ -22,13 +22,12 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
    
   async validate(payload: JwtPayload, done: (err, user) => void) {
-    console.log(payload);
    
     if (!payload || !payload.id) {
       return done(new UnauthorizedException(), false);
     }
 
-    const user = await User.findOneBy({ currentTokenId: payload.id, });
+    const user = (await User.find({ where: { currentTokenId: payload.id, }, relations: [ 'role', ], }))[ 0 ];
     if (!user) {
       return done(new UnauthorizedException(), false);
     }
