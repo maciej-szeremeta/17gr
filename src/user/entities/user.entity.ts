@@ -43,6 +43,4 @@ export class User extends BaseEntity{
   @UpdateDateColumn()
     updateAt: Date;
 
-  // TODO: Sprawdzić czy email jest unique
-
 }
