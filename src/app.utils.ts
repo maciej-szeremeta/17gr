@@ -18,4 +18,11 @@ export const config = {
   messageErr: {
     
   },
+  secretKeys: {
+    jwt: 'tajemniczy kluczyk',
+  },
+  configDomain:{
+    domena: 'localhost',
+    secure: false,
+  },
 };
