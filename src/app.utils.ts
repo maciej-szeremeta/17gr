@@ -1,12 +1,20 @@
 export const config = {
+
+  // PL - 0
+  // EN - 1
+  languages: 0,
   validation: {
     password:/^(?=.*?[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[#?!@$%^&*-]).{6,24}$/,
   },
-  message: {
-    notEmpty: 'Pole nie może być puste',
-    length:'Zła długość pola',
-    string: 'Pole powinno być tekstem',
-    enum:'Musi zwierać opcje z listy Enum',
-    password:'Hasło powinno zawierać jedną dużą przynajmniej jedna mała liter oraz znak specjalny',
+  messageValid: {
+    notEmpty: [ 'Pole nie może być puste.', 'The field cannot be empty.', ],
+    length:[ 'Nie odpowiednia długość pola.', 'Field length not appropriate.', ],
+    string: [ 'Pole powinno być tekstem.', 'The field should be text.', ],
+    enum:[ 'Musi zwierać opcję z listy.', 'Must contain an option from the list.', ],
+    password: [ 'Hasło powinno zawierać przynajmniej jedną dużą, jedną mała liter oraz znak specjalny', 'The password should contain at least one uppercase, one lowercase letter and a special character', ],
+    unique:[ 'Wybrana nazwa jest już zajęta. Wybierz inna nazwę', 'The selected name is already taken. Please choose another name', ],
+  },
+  messageErr: {
+    
   },
 };

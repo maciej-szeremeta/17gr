@@ -1,8 +1,9 @@
 import { CreateUserRoleRes, } from '../interface/user-role';
-import { Injectable, NotFoundException, } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException, } from '@nestjs/common';
 import { GetListOfUserRolesRes, UserRoleItem, } from '../interface/user-role';
 import { UserRole, } from './entities/user-role.entity';
-import { createUserRoleDto, } from './dto/create-user_role.dto';
+import { createUserRoleDto, } from './dto/create-user-role.dto';
+import { config, } from '../app.utils';
 
 @Injectable()
 export class UserRoleService {
@@ -10,7 +11,7 @@ export class UserRoleService {
   async createUserRole(user: createUserRoleDto): Promise<CreateUserRoleRes> {
     const { type, } = user;
 
-    if (await this.hasRole(type)) { throw new NotFoundException('Taka rola już istnieje'); }
+    if (await this.isRoleTaken(type)) { throw new ConflictException(config.messageValid.unique[ config.languages ]); }
     
     const newUserRole = new UserRole();
     newUserRole.type = type;
@@ -29,7 +30,7 @@ export class UserRoleService {
     return await UserRole.find();
   }
 
-  async hasRole(type: string): Promise<boolean> { 
+  async isRoleTaken(type: string): Promise<boolean> { 
     return (await this.getAllUserRoles()).some(role => 
       role.type === type);
   }

@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Inject, Param, Post, UsePipes, ValidationPipe, } from '@nestjs/common';
 import { CreateUserRoleRes, GetListOfUserRolesRes, UserRoleRes, } from '../interface/user-role';
-import { createUserRoleDto, } from './dto/create-user_role.dto';
+import { createUserRoleDto, } from './dto/create-user-role.dto';
 import { UserRoleService, } from './user-role.service';
 
 @Controller('/user-role')
