@@ -5,10 +5,11 @@ import { AppController, } from './app.controller';
 import { AppService, } from './app.service';
 import { UserModule, } from './user/user.module';
 import { UserRoleModule, } from './user-role/user-role.module';
-import { AuthModule } from './auth/auth.module';
+import { AuthModule, } from './auth/auth.module';
+import { MailModule, } from './mail/mail.module';
 
 @Module({
-  imports: [ TypeOrmModule.forRoot(config as TypeOrmModuleOptions), UserModule, UserRoleModule, AuthModule, ],
+  imports: [ TypeOrmModule.forRoot(config as TypeOrmModuleOptions), UserModule, UserRoleModule, AuthModule, MailModule, ],
   controllers: [ AppController, ],
   providers: [ AppService, ],
 })
