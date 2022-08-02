@@ -1,6 +1,6 @@
-import { UserRoleEnum, UserRoleItem, } from '../interface/user_role';
+import { UserRoleEnum, UserRoleItem, } from '../../interface/user-role';
 import { BaseEntity, Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn, } from 'typeorm';
-import { User, } from '../user/user.entity';
+import { User, } from '../../user/user.entity';
 
 @Entity('users_role')
 export class UserRole extends BaseEntity implements UserRoleItem{
@@ -14,18 +14,18 @@ export class UserRole extends BaseEntity implements UserRoleItem{
   @Column()
     createdBy:string;
 
-     @CreateDateColumn()
-       createdAt: Date;
+  @CreateDateColumn()
+    createdAt: Date;
      
-     @UpdateDateColumn()
-       updateAt: Date;
+  @UpdateDateColumn()
+    updateAt: Date;
      
-     @OneToMany(
-       () => 
-         User, user => 
-         user.role
-     )
-       user: User;
+  @OneToMany(
+    () => 
+      User, user => 
+      user.role
+  )
+    user: User;
 
   // TODO: Sprawdzić czy type jest unique
 
