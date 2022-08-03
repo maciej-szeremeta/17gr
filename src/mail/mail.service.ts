@@ -1,12 +1,17 @@
 import { Injectable, } from '@nestjs/common';
 import { MailerService, } from '@nestjs-modules/mailer';
 
+interface confirmMail{
+  role: string,
+  userId: string,
+  tokenId: string
+}
 @Injectable()
 export class MailService {
 
   constructor(private readonly mailService: MailerService) { }
    
-  async sendMail(to:string, subject:string, html:string):Promise<any> {
-    return this.mailService.sendMail({ to, subject, html, });
+  async confirmMail(to: string, subject: string, template: string, context: confirmMail):Promise<any> {
+    return this.mailService.sendMail({ to, subject, template, context, });
   }
 }

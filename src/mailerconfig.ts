@@ -6,16 +6,23 @@ export = {
     port: 2500,
     secure: false, // true for 465, false for other ports
     auth: {
-      user: 'user', // generated ethereal user
-      pass: 'user', // generated ethereal password
+      user: 'admin@hh.pl', // generated ethereal user
+      pass: 'admin1', // generated ethereal password
+    },
+    tls: {
+
+      // do not fail on invalid certs
+      rejectUnauthorized: false,
     },
   },
   defaults: {
-    from : 'admin@test.com',
+    from : 'admin@hh.pl',
   },
   template: {
-    dir: './templates/email',
-    adapted: new HandlebarsAdapter(),
+    dir: __dirname + '/mail/templates',
+    adapter: new HandlebarsAdapter(undefined, {
+      inlineCssEnabled: true,
+    }),
     options: {
       strict:true,
     },

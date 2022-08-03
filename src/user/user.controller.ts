@@ -1,8 +1,14 @@
-import { Body, Controller, Post, } from '@nestjs/common';
+import { Body, Controller, Post, UseGuards, UsePipes, ValidationPipe, } from '@nestjs/common';
+import { AuthGuard, } from '@nestjs/passport';
+import { UserRoleEnum, } from '../interface/user-role';
+import { Roles, } from '../decorators/roles.decorator';
 import { UserRegisterRes, } from '../interface/user';
 import { RegisterAdminDto, } from './dto/register-admin.dto';
-import { RegisterUserDto, } from './dto/register-user.dto';
+import { RegisterUserDto as RegisterHrDto, } from './dto/register-hr.dto';
 import { UserService, } from './user.service';
+import { RolesGuard, } from '../guards/roles.guard';
+import { UserObj, } from '../decorators/user-obj.decorator';
+import { User, } from './entities/user.entity';
 
 @Controller('/user')
 export class UserController {
@@ -17,10 +23,14 @@ export class UserController {
     return this.userService.registerAdmin(createUser);
   }
 
-  @Post('/register')
-    async createUser(
-  @Body() createUser: RegisterUserDto
+  @Post('/register-hr')
+  @UsePipes(ValidationPipe)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles(UserRoleEnum.ADMIN)
+    async createHr(
+      @Body() createUser: RegisterHrDto,
+      @UserObj() user: User
     ): Promise<UserRegisterRes> {
-      return this.userService.register(createUser);
+      return this.userService.registerHr(createUser, user);
     }
 }

@@ -1,11 +1,11 @@
 import { Module, forwardRef, } from '@nestjs/common';
-import { UserRoleModule, } from '../user-role/user-role.module';
+import { MailModule, } from '../mail/mail.module';
 import { UserController, } from './user.controller';
 import { UserService, } from './user.service';
 
 @Module({
   imports:[ forwardRef(() =>  
-    UserRoleModule), ],
+    MailModule), ],
   controllers: [ UserController, ],
   providers: [ UserService, ],
 })
