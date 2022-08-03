@@ -7,9 +7,10 @@ import { UserModule, } from './user/user.module';
 import { UserRoleModule, } from './user-role/user-role.module';
 import { AuthModule, } from './auth/auth.module';
 import { MailModule, } from './mail/mail.module';
+import { HrModule } from './hr/hr.module';
 
 @Module({
-  imports: [ TypeOrmModule.forRoot(config as TypeOrmModuleOptions), UserModule, UserRoleModule, AuthModule, MailModule, ],
+  imports: [ TypeOrmModule.forRoot(config as TypeOrmModuleOptions), UserModule, UserRoleModule, AuthModule, MailModule, HrModule, ],
   controllers: [ AppController, ],
   providers: [ AppService, ],
 })
