@@ -1,5 +1,5 @@
 import { CreateUserRoleRes, } from '../interface/user-role';
-import { ConflictException, Injectable, NotFoundException, } from '@nestjs/common';
+import { ConflictException, Injectable, } from '@nestjs/common';
 import { GetListOfUserRolesRes, UserRoleEntity, } from '../interface/user-role';
 import { UserRole, } from './entities/user-role.entity';
 import { createUserRoleDto, } from './dto/create-user-role.dto';

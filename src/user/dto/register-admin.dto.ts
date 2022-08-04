@@ -1,7 +1,7 @@
 import { IsNotEmpty, Length, IsString, IsEmail, Matches, } from 'class-validator';
 import { config, } from '../../app.utils';
 
-export class RegisterUserDto{
+export class RegisterAdminDto{
    @IsNotEmpty({ message: config.messageValid.notEmpty[ config.languages ], })
    @IsString({ message: config.messageValid.string[ config.languages ], })
    @IsEmail({ message: config.messageValid.email[ config.languages ], })

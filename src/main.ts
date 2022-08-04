@@ -8,6 +8,7 @@ import * as morgan from 'morgan';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   (app as NestExpressApplication).use(morgan('dev'));
+
   app.useGlobalPipes(new ValidationPipe({
 
     // disableErrorMessages: true,
