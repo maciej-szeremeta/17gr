@@ -5,12 +5,15 @@ import { RegisterAdminDto, } from './dto/register-admin.dto';
 import { User, } from './entities/user.entity';
 import { UserRoleEnum, } from '../interface/user-role';
 import { UserRole, } from 'src/user-role/entities/user-role.entity';
-import { RegisterUserDto, } from './dto/register-hr.dto';
+import { RegisterHrDto, } from './dto/register-hr.dto';
 import { MailService, } from '../mail/mail.service';
 import { v4 as uuid, }from 'uuid';
 import { Hr, } from '../hr/entities/hr.entity';
 import { HrService, } from '../hr/hr.service';
 import { HrRegisterRes, } from '../interface/hr';
+import { StudentImportRes, } from '../interface/student';
+import { RegisterStudentDto, } from './dto/register-student.dto';
+import { MulterDiskUploadFiles, } from '../interface/file';
 
 @Injectable()
 export class UserService {
@@ -57,7 +60,7 @@ export class UserService {
     return this.filterAdmin(registerUser);
   };
 
-  async registerHr(newUser: RegisterUserDto, userRole: User): Promise<HrRegisterRes> {
+  async registerHr(newUser: RegisterHrDto, userRole: User): Promise<HrRegisterRes> {
 
     const user = await User.findOneBy({ email: newUser.email, });
     if (user) {
@@ -104,5 +107,17 @@ export class UserService {
     }
 
     return this.filterHr(registerHr);
+  };
+
+  async importStudent( userRole: User, files: MulterDiskUploadFiles): Promise<StudentImportRes> {
+    console.log( userRole, files);
+    return {
+      id:'123',
+      email:'mama@o2.pl',
+      courseCompletion: 5,
+      courseEngagement: 5,
+      projectDegree: 5,
+      teamProjectDegree: 5,
+    };
   };
 }

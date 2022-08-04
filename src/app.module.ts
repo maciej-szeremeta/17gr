@@ -8,9 +8,10 @@ import { UserRoleModule, } from './user-role/user-role.module';
 import { AuthModule, } from './auth/auth.module';
 import { MailModule, } from './mail/mail.module';
 import { HrModule } from './hr/hr.module';
+import { StudentModule } from './student/student.module';
 
 @Module({
-  imports: [ TypeOrmModule.forRoot(config as TypeOrmModuleOptions), UserModule, UserRoleModule, AuthModule, MailModule, HrModule, ],
+  imports: [ TypeOrmModule.forRoot(config as TypeOrmModuleOptions), UserModule, UserRoleModule, AuthModule, MailModule, HrModule, StudentModule, ],
   controllers: [ AppController, ],
   providers: [ AppService, ],
 })

@@ -8,8 +8,10 @@ export const config = {
   },
   messageValid: {
     notEmpty: [
-      'Pole nie może być puste.',
-      'The field cannot be empty.', ],
+      (name: string) => 
+        `${name} nie może być pusty`,
+      (name: string) => 
+        `The ${name} field cannot be empty`, ],
     length: [
       'Nie odpowiednia długość pola.',
       'Field length not appropriate.', ],

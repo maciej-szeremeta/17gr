@@ -1,15 +1,20 @@
-import { Body, Controller, Post, UseGuards, UsePipes, ValidationPipe, } from '@nestjs/common';
+import { Body, Controller, Post, UploadedFiles, UseGuards, UseInterceptors, UsePipes, ValidationPipe, } from '@nestjs/common';
+import { join, } from 'path';
+import { FileFieldsInterceptor, } from '@nestjs/platform-express';
 import { AuthGuard, } from '@nestjs/passport';
 import { UserRoleEnum, } from '../interface/user-role';
 import { Roles, } from '../decorators/roles.decorator';
 import { UserRegisterRes, } from '../interface/user';
 import { RegisterAdminDto, } from './dto/register-admin.dto';
-import { RegisterUserDto as RegisterHrDto, } from './dto/register-hr.dto';
+import { RegisterHrDto as RegisterHrDto, } from './dto/register-hr.dto';
 import { UserService, } from './user.service';
 import { RolesGuard, } from '../guards/roles.guard';
 import { UserObj, } from '../decorators/user-obj.decorator';
 import { User, } from './entities/user.entity';
 import { HrRegisterRes, } from '../interface/hr';
+import { StudentImportRes, } from '../interface/student';
+import { MulterDiskUploadFiles, } from '../interface/file';
+import { storageDir, } from '../utils/storage';
 
 @Controller('/user')
 export class UserController {
@@ -29,9 +34,22 @@ export class UserController {
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles(UserRoleEnum.ADMIN)
     async createHr(
-      @Body() createUser: RegisterHrDto,
+      @Body() createHr: RegisterHrDto,
       @UserObj() user: User
     ): Promise<HrRegisterRes> {
-      return this.userService.registerHr(createUser, user);
+      return this.userService.registerHr(createHr, user);
     }
+
+  @Post('/import-student')
+  @UsePipes(ValidationPipe)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles(UserRoleEnum.ADMIN)
+  @UseInterceptors(FileFieldsInterceptor(
+    [ { name: 'file', maxCount: 1, }, ], { dest: join(storageDir(), 'csv'), }))
+  async createStudent(
+    @UploadedFiles() files: MulterDiskUploadFiles,
+    @UserObj() user: User
+  ): Promise<StudentImportRes> {
+    return this.userService.importStudent( user, files);
+  }
 }

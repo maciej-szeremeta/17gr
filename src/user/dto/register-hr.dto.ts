@@ -1,17 +1,17 @@
 import { IsNotEmpty, IsString, IsEmail, IsNumber, Min, Max, IsOptional, } from 'class-validator';
 import { config, } from '../../app.utils';
 
-export class RegisterUserDto{
-  @IsNotEmpty({ message: config.messageValid.notEmpty[ config.languages ], })
+export class RegisterHrDto{
+  @IsNotEmpty({ message: config.messageValid.notEmpty[ config.languages ]('email'), })
   @IsString({ message: config.messageValid.string[ config.languages ], })
   @IsEmail({ message: config.messageValid.email[ config.languages ], })
     email: string;
 
-  @IsNotEmpty({ message: config.messageValid.notEmpty[ config.languages ], })
+  @IsNotEmpty({ message: config.messageValid.notEmpty[ config.languages ]('fullName'), })
   @IsString({ message: config.messageValid.string[ config.languages ], })
     fullName: string;
 
-  @IsNotEmpty({ message:config.messageValid.notEmpty[ config.languages ], })
+  @IsNotEmpty({ message:config.messageValid.notEmpty[ config.languages ]('company'), })
   @IsString({ message: config.messageValid.string[ config.languages ], })
     company: string;
 

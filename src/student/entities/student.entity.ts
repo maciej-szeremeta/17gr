@@ -2,19 +2,19 @@ import { User, } from '../../user/entities/user.entity';
 import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn, } from 'typeorm';
 
 @Entity()
-export class Hr extends BaseEntity{
+export class Student extends BaseEntity{
 
 @PrimaryGeneratedColumn('uuid')
   id: string;
 
-@Column()
-  fullName: string;
+@Column({ type:'tinyint', default: 0, })
+  courseCompletion: number;
 
-@Column()
-  company: string;
+@Column({ type:'tinyint', default: 0, })
+  courseEngagement: number;
 
-@Column({ default: 1, })
-  maxReservedStudents: number;
+@Column({ type:'tinyint', default: 0, })
+  teamProjectDegree: number;
   
 @Column({ length:36, })
   createdBy: string | null;
@@ -30,5 +30,5 @@ export class Hr extends BaseEntity{
   @JoinColumn()
   user:User;
 
-// TODO: Dodać Relacje ManyToMany z student
+// TODO: Dodać Relacje ManyToOne z student_urls
 }
