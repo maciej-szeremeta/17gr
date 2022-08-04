@@ -9,6 +9,7 @@ import { UserService, } from './user.service';
 import { RolesGuard, } from '../guards/roles.guard';
 import { UserObj, } from '../decorators/user-obj.decorator';
 import { User, } from './entities/user.entity';
+import { HrRegisterRes, } from '../interface/hr';
 
 @Controller('/user')
 export class UserController {
@@ -30,7 +31,7 @@ export class UserController {
     async createHr(
       @Body() createUser: RegisterHrDto,
       @UserObj() user: User
-    ): Promise<UserRegisterRes> {
+    ): Promise<HrRegisterRes> {
       return this.userService.registerHr(createUser, user);
     }
 }

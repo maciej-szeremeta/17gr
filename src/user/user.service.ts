@@ -8,21 +8,34 @@ import { UserRole, } from 'src/user-role/entities/user-role.entity';
 import { RegisterUserDto, } from './dto/register-hr.dto';
 import { MailService, } from '../mail/mail.service';
 import { v4 as uuid, }from 'uuid';
+import { Hr, } from '../hr/entities/hr.entity';
+import { HrService, } from '../hr/hr.service';
+import { HrRegisterRes, } from '../interface/hr';
 
 @Injectable()
 export class UserService {
   constructor(
     @Inject(forwardRef(() => 
-      MailService))
-    private mailService: MailService
+      MailService)
+    )
+    private mailService: MailService,
+    @Inject(forwardRef(() => 
+      HrService)
+    )
+    private hrService: HrService
   ) {}
 
-  filter(user: User): UserRegisterRes {
+  filterAdmin(user: User): UserRegisterRes {
     const { id, email, } = user;
     return {
       id,
       email,
     };
+  };
+
+  filterHr(hr: Hr): HrRegisterRes{
+    const { fullName, company, maxReservedStudents, user, } = hr;
+    return { id: user.id, email:user.email, fullName, company, maxReservedStudents, };
   };
 
   async registerAdmin(newUser: RegisterAdminDto): Promise<UserRegisterRes> {
@@ -41,10 +54,11 @@ export class UserService {
     registerUser.role = user_role;
     await registerUser.save();
 
-    return this.filter(registerUser);
+    return this.filterAdmin(registerUser);
   };
 
-  async registerHr(newUser: RegisterUserDto, userRole:User): Promise<UserRegisterRes> {
+  async registerHr(newUser: RegisterUserDto, userRole: User): Promise<HrRegisterRes> {
+
     const user = await User.findOneBy({ email: newUser.email, });
     if (user) {
       throw new ConflictException('Email już istnieje , wybierz inny mail');
@@ -59,19 +73,28 @@ export class UserService {
     const registerUser = new User();
 
     registerUser.email = newUser.email;
-    registerUser.pwdHash = await hashPwd(newUser.pwd);
     registerUser.createdBy = userRole.id;
-
     await registerUser.save();
+    
+    registerUser.pwdHash = uuid();
     registerUser.createdBy = registerUser.id;
-    registerUser.currentTokenId = uuid();
     registerUser.role = user_role;
-
     await registerUser.save();
+
+    const userId = await User.findOneBy({ id: registerUser.id, });
+
+    const registerHr = new Hr();
+    registerHr.fullName = newUser.fullName;
+    registerHr.company = newUser.company;
+    registerHr.maxReservedStudents = newUser.maxReservedStudents;
+    registerHr.createdBy = registerUser.id;
+    registerHr.user = userId;
+    await registerHr.save();
+
     try {
       await this.mailService.confirmMail(
-        newUser.email, 'Witaj w aplikacji HH! Potwierdz Email', './confirm', {
-          role: registerUser.role.type,
+        newUser.email, `Witaj ${registerHr.fullName} w aplikacji HH 17! Potwierdz Email`, './confirm', {
+          role: registerHr.fullName,
           userId: registerUser.id,
           tokenId: registerUser.currentTokenId,
         });
@@ -80,6 +103,6 @@ export class UserService {
       console.error(error);
     }
 
-    return this.filter(registerUser);
+    return this.filterHr(registerHr);
   };
 }
