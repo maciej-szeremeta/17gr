@@ -14,7 +14,7 @@ import { User, } from './entities/user.entity';
 import { HrRegisterRes, } from '../interface/hr';
 import { StudentImportRes, } from '../interface/student';
 import { MulterDiskUploadFiles, } from '../interface/file';
-import { storageDir, } from '../utils/storage';
+import { multerStorage, storageDir, } from '../utils/storage';
 
 @Controller('/user')
 export class UserController {
@@ -45,7 +45,7 @@ export class UserController {
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles(UserRoleEnum.ADMIN)
   @UseInterceptors(FileFieldsInterceptor(
-    [ { name: 'file', maxCount: 1, }, ], { dest: join(storageDir(), 'csv'), }))
+    [ { name: 'csv', maxCount: 1, }, ], { storage: multerStorage(join(storageDir(), 'csv')), }))
   async createStudent(
     @UploadedFiles() files: MulterDiskUploadFiles,
     @UserObj() user: User

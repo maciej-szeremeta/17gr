@@ -12,8 +12,11 @@ import { Hr, } from '../hr/entities/hr.entity';
 import { HrService, } from '../hr/hr.service';
 import { HrRegisterRes, } from '../interface/hr';
 import { StudentImportRes, } from '../interface/student';
-import { RegisterStudentDto, } from './dto/register-student.dto';
 import { MulterDiskUploadFiles, } from '../interface/file';
+import { unlink, } from 'fs';
+import { storageDir, } from '../utils/storage';
+import { join, } from 'path';
+import * as csv from 'csvtojson';
 
 @Injectable()
 export class UserService {
@@ -110,14 +113,45 @@ export class UserService {
   };
 
   async importStudent( userRole: User, files: MulterDiskUploadFiles): Promise<StudentImportRes> {
-    console.log( userRole, files);
-    return {
-      id:'123',
-      email:'mama@o2.pl',
-      courseCompletion: 5,
-      courseEngagement: 5,
-      projectDegree: 5,
-      teamProjectDegree: 5,
-    };
+    const csvFile = files?.csv?.[ 0 ] ?? null;
+
+    console.log(csvFile);
+    try {
+
+      // Wykonanie kodu z pol textowych
+      if (csvFile) {
+        const json = await csv({
+          flatKeys: false,
+          checkType: true,
+          delimiter: ';',
+          ignoreEmpty: true,
+        }).fromFile(csvFile.path);
+        console.log(json);
+
+        // Wykonanie kodu z pliku csv
+      }
+      return {
+        id:'123',
+        email:'mama@o2.pl',
+        courseCompletion: 5,
+        courseEngagement: 5,
+        projectDegree: 5,
+        teamProjectDegree: 5,
+      };
+    }
+    catch (err) {
+      try {
+
+        // Usówanie pliku gdy pójdzie cos nie tak
+        if (csvFile) {       
+          unlink(join(storageDir(), 'csv', csvFile.filename), err => { console.error(err); });
+        }
+      }
+      catch (err2) {
+        throw err2;
+      }
+      throw err;
+    }
+
   };
 }

@@ -1,10 +1,12 @@
 export interface MulterDiskUploadFiles{
    [fieldname: string]: {
       filename: string;
+      originalname: string;
+      encoding: string;
       size: number;
       mimetype: string;
-      originalname: string;
       fieldname: string;
-      encoding: string;
+      path: string;
+      destination: string;
    }[] | undefined
 }
