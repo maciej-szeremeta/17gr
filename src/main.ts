@@ -5,10 +5,14 @@ import { NestExpressApplication, } from '@nestjs/platform-express';
 import * as cookieParser from 'cookie-parser';
 import * as morgan from 'morgan';
 import rateLimit from 'express-rate-limit';
+import { config } from './app.utils';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.enableCors({ credentials: true, origin: 'http://127.0.0.1:3000/', });
+  app.enableCors({
+    credentials: config.configCors.credentials,
+    origin: config.configCors.credentials,
+  });
   app.setGlobalPrefix('api');
   app.useGlobalPipes(new ValidationPipe({
 

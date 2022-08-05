@@ -54,8 +54,14 @@ export const config = {
   secretKeys: {
     jwt: 'tajemniczy kluczyk',
   },
-  configDomain:{
-    domena: 'localhost',
+  configCookie:{
+    domain: 'localhost',
     secure: false,
+    path: '/',
+    httpOnly:true,
+  },
+  configCors:{
+    credentials: true,
+    origin:'http://localhost:3000',
   },
 };

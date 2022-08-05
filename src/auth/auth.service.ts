@@ -12,7 +12,7 @@ export class AuthService {
 
   private createToken(currentTokenId: string): { accessToken: string, expiresIn: number }{
     const payload = { id: currentTokenId, };
-    const expiresIn = 60 * 60 * 24 * 1000;
+    const expiresIn = 15 * 60 * 1000;
 
     const accessToken = sign(payload, config.secretKeys.jwt, { expiresIn, });
     
@@ -35,7 +35,7 @@ export class AuthService {
   async login(req: LoginUserDto, res: Response) {
     try {
      
-      const user = await User.findOneBy({ email: req.email, });
+      const user = (await User.find({ where: { email: req.email, }, relations: [ 'role', ], }))[ 0 ];
       
       const validPwd = await comparePwd (
         req.pwd, user.pwdHash
@@ -45,16 +45,20 @@ export class AuthService {
         return res.json({ error: config.messageErr.login[ config.languages ], });
       }
 
-      const token = this.createToken(await this.generateToken(user));
+      if(!user.isActive){
+        return res.json({ error: `Sprawdź skrzynkę mailowa ${user.email}, na którą wysłaliśmy link aktywacyjny`, });
+      }
 
+      const token = this.createToken(await this.generateToken(user));
       return res
         .cookie('jwt', token.accessToken, {
-          secure: config.configDomain.secure,
-          domain: config.configDomain.domena,
-          path:'/',
-          httpOnly: true,
+          secure: config.configCookie.secure,
+          domain: config.configCookie.domain,
+          path:config.configCookie.path,
+          httpOnly: config.configCookie.httpOnly,
+          maxAge:token.expiresIn,
         })
-        .json({ ok: true, });
+        .json({ msg: true, email:user.email, role:user.role.type, } );
     }
     catch (err) {
       return res.json({ error: err.message, });
@@ -66,11 +70,11 @@ export class AuthService {
       user.currentTokenId = null;
       await user.save();
       res.clearCookie('jwt', {
-        secure: config.configDomain.secure,
-        domain: config.configDomain.domena,
+        secure: config.configCookie.secure,
+        domain: config.configCookie.domain,
         httpOnly: true,
       });
-      return res.json({ ok:true, });
+      return res.json({ msg : true, });
     }
     catch (err) {
       return res.json({ error:err.message, });
