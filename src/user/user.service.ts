@@ -9,7 +9,6 @@ import { UserRole, } from 'src/user-role/entities/user-role.entity';
 import { RegisterHrDto, } from './dto/register-hr.dto';
 import { MailService, } from '../mail/mail.service';
 import { v4 as uuid, }from 'uuid';
-import { Hr, } from '../hr/entities/hr.entity';
 import { HrService, } from '../hr/hr.service';
 import { HrEntity, HrRegisterRes, } from '../interface/hr';
 import { StudentImportRes, } from '../interface/student';
