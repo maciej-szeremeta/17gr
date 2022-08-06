@@ -1,4 +1,4 @@
-import { PipeTransform, Injectable, ArgumentMetadata, BadRequestException, UnprocessableEntityException, } from '@nestjs/common';
+import { PipeTransform, Injectable, ArgumentMetadata, UnprocessableEntityException, } from '@nestjs/common';
 
 interface CheckFilePipeOptions{
   size: number;
@@ -32,8 +32,6 @@ export class SizeAndTypeFilePipe implements PipeTransform {
       throw new UnprocessableEntityException(`Plik nie może być większy niż ${options.size} B`);
     }
 
-    console.log(metadata);
-    
     return file;
   }
 }

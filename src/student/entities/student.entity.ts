@@ -14,6 +14,9 @@ export class Student extends BaseEntity{
   courseEngagement: number;
 
 @Column({ type:'tinyint', default: 0, })
+  projectDegree: number;
+
+@Column({ type:'tinyint', default: 0, })
   teamProjectDegree: number;
   
 @Column({ length:36, })

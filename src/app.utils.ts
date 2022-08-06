@@ -56,6 +56,12 @@ export const config = {
       (email:string) => 
         `Please check your ${email} mailbox to which we sent the activation link.`,
     ],
+    regiserConflictMail: [
+      (emails:string[]|string) => 
+        `${emails} już istnieje w bazie, wybierz inny email.`,
+      (emails:string[]|string) => 
+        `${emails} already exists in the database, please select another email.`,
+    ],
   },
   secretKeys: {
     jwt: 'tajemniczy kluczyk',

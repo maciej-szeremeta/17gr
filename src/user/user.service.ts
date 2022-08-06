@@ -1,3 +1,4 @@
+import { Student, } from './../student/entities/student.entity';
 import { Injectable, Inject, forwardRef, NotFoundException, ConflictException, } from '@nestjs/common';
 import { UserRegisterRes, } from '../interface/user';
 import { hashPwd, } from '../utils/hash-pwd';
@@ -17,6 +18,7 @@ import { unlink, } from 'fs';
 import { storageDir, } from '../utils/storage';
 import { join, } from 'path';
 import * as csv from 'csvtojson';
+import { config, } from '../app.utils';
 
 @Injectable()
 export class UserService {
@@ -67,7 +69,7 @@ export class UserService {
 
     const user = await User.findOneBy({ email: newUser.email, });
     if (user) {
-      throw new ConflictException('Email już istnieje , wybierz inny mail');
+      throw new ConflictException(config.messageErr.regiserConflictMail[ config.languages ](user.email));
     }
 
     const user_role = await UserRole.findOneByOrFail({ type: UserRoleEnum.HR, });
@@ -93,7 +95,7 @@ export class UserService {
     registerHr.fullName = newUser.fullName;
     registerHr.company = newUser.company;
     registerHr.maxReservedStudents = newUser.maxReservedStudents;
-    registerHr.createdBy = registerUser.id;
+    registerHr.createdBy = userRole.id;
     registerHr.user = userId;
     await registerHr.save();
 
@@ -114,19 +116,68 @@ export class UserService {
 
   async importStudent( userRole: User, files: MulterDiskUploadFiles): Promise<StudentImportRes> {
     const csvFile = files?.csv?.[ 0 ] ?? null;
-
-    console.log(csvFile);
     try {
 
       // Wykonanie kodu z pol textowych
       if (csvFile) {
-        const json = await csv({
+        const jsonData = await csv({
           flatKeys: false,
           checkType: true,
           delimiter: ';',
           ignoreEmpty: true,
         }).fromFile(csvFile.path);
-        console.log(json);
+
+        const conflictEmails = [];
+        for await (const { email, } of jsonData) { 
+          const user = await User.findOneBy({ email, });
+          if (user) {
+            conflictEmails.push(email);
+          }
+        }
+        console.log(conflictEmails);
+        if (conflictEmails.length > 0) {
+          throw new ConflictException(config.messageErr.regiserConflictMail[ config.languages ](conflictEmails));
+        }
+        const user_role = await UserRole.findOneByOrFail({ type: UserRoleEnum.STUDENT, });
+
+        if(!user_role){
+          throw new NotFoundException('Nie odnaleziona Encji');
+        }
+
+        for await (const newUser of jsonData) {
+          const registerUser = new User();
+
+          registerUser.email = newUser.email;
+          registerUser.createdBy = userRole.id;
+          await registerUser.save();
+    
+          registerUser.pwdHash = uuid();
+          registerUser.createdBy = userRole.id;
+          registerUser.role = user_role;
+          await registerUser.save();
+
+          const userId = await User.findOneBy({ id: registerUser.id, });
+
+          const registerStudent = new Student();
+          registerStudent.courseCompletion = newUser.courseCompletion;
+          registerStudent.courseEngagement = newUser.courseEngagement;
+          registerStudent.projectDegree = newUser.projectDegree;
+          registerStudent.teamProjectDegree = newUser.teamProjectDegree;
+          registerStudent.createdBy = userRole.id;
+          registerStudent.user = userId;
+          await registerStudent.save();
+          try {
+            await this.mailService.confirmMail(
+              newUser.email, 'Witaj Kursancie w aplikacji HH 17! Potwierdz Email', './confirm', {
+                role: 'Kursancie',
+                userId: registerUser.id,
+                tokenId: registerUser.currentTokenId,
+              });
+          }
+          catch (error) {
+            console.error(error);
+          }
+        }
 
         // Wykonanie kodu z pliku csv
       }

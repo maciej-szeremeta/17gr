@@ -49,7 +49,7 @@ export class UserController {
     [ { name: 'csv', }, ], { storage: multerStorage(join(storageDir(), 'csv')), }))
   async createStudent(
     @UploadedFiles(
-      new SizeAndTypeFilePipe({ size:1000, type:'csv', })
+      new SizeAndTypeFilePipe({ size: 1000, type: 'csv', })
     ) files: MulterDiskUploadFiles,
     @UserObj() user: User
   ): Promise<StudentImportRes> {
