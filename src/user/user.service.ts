@@ -1,4 +1,3 @@
-import { Student, } from './../student/entities/student.entity';
 import { Injectable, Inject, forwardRef, NotFoundException, ConflictException, } from '@nestjs/common';
 import { UserRegisterRes, } from '../interface/user';
 import { hashPwd, } from '../utils/hash-pwd';
@@ -18,7 +17,8 @@ import { storageDir, } from '../utils/storage';
 import { join, } from 'path';
 import * as csv from 'csvtojson';
 import { config, } from '../app.utils';
-import { StudentUrlService, } from '../student-url/student-url.service';
+import { StudentService, } from '../student/student.service';
+import { CreateStudentDto, } from '../student/dto/create-student.dto';
 
 @Injectable()
 export class UserService {
@@ -32,9 +32,9 @@ export class UserService {
     )
     private hrService: HrService,
     @Inject(forwardRef(() => 
-      StudentUrlService)
+      StudentService)
     )
-    private studentUrlService: StudentUrlService
+    private studentService: StudentService
   ) {}
 
   async registerAdmin(newUser: RegisterAdminDto): Promise<UserRegisterRes> {
@@ -114,6 +114,7 @@ export class UserService {
   async importStudent( userRole: User, files: MulterDiskUploadFiles): Promise<StudentImportRes> {
     const csvFile = files?.csv?.[ 0 ] ?? null;
     try {
+      const respS = [];
 
       // Wykonanie kodu z pol textowych
       if (csvFile) {
@@ -131,7 +132,6 @@ export class UserService {
             conflictEmails.push(email);
           }
         }
-        console.log(conflictEmails);
         if (conflictEmails.length > 0) {
           throw new ConflictException(config.messageErr.regiserConflictMail[ config.languages ](conflictEmails));
         }
@@ -140,7 +140,6 @@ export class UserService {
         if(!user_role){
           throw new NotFoundException('Nie odnaleziona Encji');
         }
-
         for await (const newUser of jsonData) {
           const registerUser = new User();
 
@@ -151,20 +150,11 @@ export class UserService {
           registerUser.pwdHash = uuid();
           registerUser.createdBy = userRole.id;
           registerUser.role = user_role;
-          await registerUser.save();
+          const newUsers = await registerUser.save();
 
-          const userId = await User.findOneBy({ id: registerUser.id, });
-
-          const registerStudent = new Student();
-          registerStudent.courseCompletion = newUser.courseCompletion;
-          registerStudent.courseEngagement = newUser.courseEngagement;
-          registerStudent.projectDegree = newUser.projectDegree;
-          registerStudent.teamProjectDegree = newUser.teamProjectDegree;
-          registerStudent.createdBy = userRole.id;
-          registerStudent.user = userId;
-          await registerStudent.save();
-
-          // this.studentUrlService.addStudentUrl()
+          const student:CreateStudentDto = { ...newUser, user: newUsers.id, };
+          const registerStudent = await this.studentService.addStudent(student, userRole);
+          respS.push(registerStudent);
           try {
             await this.mailService.confirmMail(
               newUser.email, 'Witaj Kursancie w aplikacji HH 17! Potwierdz Email', './confirm', {
@@ -177,17 +167,8 @@ export class UserService {
             console.error(error);
           }
         }
-
-        // Wykonanie kodu z pliku csv
       }
-      return {
-        id:'123',
-        email:'mama@o2.pl',
-        courseCompletion: 5,
-        courseEngagement: 5,
-        projectDegree: 5,
-        teamProjectDegree: 5,
-      };
+      return respS;
     }
     catch (err) {
       try {
@@ -204,4 +185,10 @@ export class UserService {
     }
 
   };
+
+  // filterStudent(student: StudentEntity):StudentRegisterRes{
+  //   const { user, fullName, company, maxReservedStudents, }=hr;
+  //   return { id: user.id, email:user.email, fullName, company, maxReservedStudents, };
+  // };
+
 }

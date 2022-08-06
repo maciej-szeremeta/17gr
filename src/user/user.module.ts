@@ -1,9 +1,9 @@
 import { Module, forwardRef, } from '@nestjs/common';
-import { StudentUrlModule, } from '../student-url/student-url.module';
 import { HrModule, } from '../hr/hr.module';
 import { MailModule, } from '../mail/mail.module';
 import { UserController, } from './user.controller';
 import { UserService, } from './user.service';
+import { StudentModule, } from '../student/student.module';
 
 @Module({
   imports: [
@@ -12,7 +12,7 @@ import { UserService, } from './user.service';
     forwardRef(() =>  
       HrModule),
     forwardRef(() =>  
-      StudentUrlModule), ],
+      StudentModule), ],
   controllers: [ UserController, ],
   providers: [ UserService, ],
 })
