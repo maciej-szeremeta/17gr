@@ -1,5 +1,6 @@
 import { User, } from '../../user/entities/user.entity';
-import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn, } from 'typeorm';
+import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn, } from 'typeorm';
+import { StudentUrl, } from 'src/student-url/entities/student-url.entity';
 
 @Entity()
 export class Student extends BaseEntity{
@@ -31,7 +32,15 @@ export class Student extends BaseEntity{
 @OneToOne(() => 
   User)
   @JoinColumn()
-  user:User;
+  user: User;
+  
+@OneToMany(
+  () => 
+    StudentUrl, studenturl => 
+    studenturl.student
+)
+@JoinColumn()
+  idStudent: StudentUrl[];
 
 // TODO: Dodać Relacje ManyToOne z student_urls
 }

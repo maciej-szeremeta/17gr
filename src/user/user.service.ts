@@ -11,7 +11,7 @@ import { MailService, } from '../mail/mail.service';
 import { v4 as uuid, }from 'uuid';
 import { Hr, } from '../hr/entities/hr.entity';
 import { HrService, } from '../hr/hr.service';
-import { HrRegisterRes, } from '../interface/hr';
+import { HrEntity, HrRegisterRes, } from '../interface/hr';
 import { StudentImportRes, } from '../interface/student';
 import { MulterDiskUploadFiles, } from '../interface/file';
 import { unlink, } from 'fs';
@@ -19,6 +19,7 @@ import { storageDir, } from '../utils/storage';
 import { join, } from 'path';
 import * as csv from 'csvtojson';
 import { config, } from '../app.utils';
+import { StudentUrlService, } from '../student-url/student-url.service';
 
 @Injectable()
 export class UserService {
@@ -30,21 +31,12 @@ export class UserService {
     @Inject(forwardRef(() => 
       HrService)
     )
-    private hrService: HrService
+    private hrService: HrService,
+    @Inject(forwardRef(() => 
+      StudentUrlService)
+    )
+    private studentUrlService: StudentUrlService
   ) {}
-
-  filterAdmin(user: User): UserRegisterRes {
-    const { id, email, } = user;
-    return {
-      id,
-      email,
-    };
-  };
-
-  filterHr(hr: Hr): HrRegisterRes{
-    const { fullName, company, maxReservedStudents, user, } = hr;
-    return { id: user.id, email:user.email, fullName, company, maxReservedStudents, };
-  };
 
   async registerAdmin(newUser: RegisterAdminDto): Promise<UserRegisterRes> {
 
@@ -63,6 +55,14 @@ export class UserService {
     await registerUser.save();
 
     return this.filterAdmin(registerUser);
+  };
+
+  filterAdmin(user: User): UserRegisterRes {
+    const { id, email, } = user;
+    return {
+      id,
+      email,
+    };
   };
 
   async registerHr(newUser: RegisterHrDto, userRole: User): Promise<HrRegisterRes> {
@@ -87,17 +87,10 @@ export class UserService {
     registerUser.pwdHash = uuid();
     registerUser.createdBy = registerUser.id;
     registerUser.role = user_role;
-    await registerUser.save();
+    const newUsers = await registerUser.save();
 
-    const userId = await User.findOneBy({ id: registerUser.id, });
-
-    const registerHr = new Hr();
-    registerHr.fullName = newUser.fullName;
-    registerHr.company = newUser.company;
-    registerHr.maxReservedStudents = newUser.maxReservedStudents;
-    registerHr.createdBy = userRole.id;
-    registerHr.user = userId;
-    await registerHr.save();
+    const hr = { ...newUser, user:newUsers.id, };
+    const registerHr = await this.hrService.addHr(hr, userRole);
 
     try {
       await this.mailService.confirmMail(
@@ -112,6 +105,11 @@ export class UserService {
     }
 
     return this.filterHr(registerHr);
+  };
+
+  filterHr(hr: HrEntity):HrRegisterRes{
+    const { user, fullName, company, maxReservedStudents, }=hr;
+    return { id: user.id, email:user.email, fullName, company, maxReservedStudents, };
   };
 
   async importStudent( userRole: User, files: MulterDiskUploadFiles): Promise<StudentImportRes> {
@@ -166,6 +164,8 @@ export class UserService {
           registerStudent.createdBy = userRole.id;
           registerStudent.user = userId;
           await registerStudent.save();
+
+          // this.studentUrlService.addStudentUrl()
           try {
             await this.mailService.confirmMail(
               newUser.email, 'Witaj Kursancie w aplikacji HH 17! Potwierdz Email', './confirm', {
