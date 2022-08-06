@@ -34,8 +34,8 @@ export const config = {
       (max:number, name:string) => 
         `The ${name} cannot be greater than ${max}`, ],
     enum: [
-      'Nie takiego typu konta.',
-      'Must contain an option from the list.', ],
+      'Brak takiego typu konta.',
+      'No such account type.', ],
     email: [
       'Proszę wpisać email.',
       'Please enter your email.', ],
@@ -47,9 +47,15 @@ export const config = {
       'The selected name is already taken. Please choose another name', ],
   },
   messageErr: {
-    login: [
-      'Błędne dane logowania!',
+    loginInvalidData: [
+      'Nieprawidłowe dane logowania!',
       'Invalid login data!', ],
+    loginIsActive: [
+      (email:string) => 
+        `Sprawdź skrzynkę mailowa ${email}, na którą wysłaliśmy link aktywacyjny.`,
+      (email:string) => 
+        `Please check your ${email} mailbox to which we sent the activation link.`,
+    ],
   },
   secretKeys: {
     jwt: 'tajemniczy kluczyk',

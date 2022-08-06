@@ -42,11 +42,11 @@ export class AuthService {
       );
 
       if (!user || !validPwd) {
-        return res.json({ error: config.messageErr.login[ config.languages ], });
+        return res.json({ error: config.messageErr.loginInvalidData[ config.languages ], });
       }
 
       if(!user.isActive){
-        return res.json({ error: `Sprawdź skrzynkę mailowa ${user.email}, na którą wysłaliśmy link aktywacyjny`, });
+        return res.json({ error: config.messageErr.loginIsActive[ config.languages ](user.email), });
       }
 
       const token = this.createToken(await this.generateToken(user));
