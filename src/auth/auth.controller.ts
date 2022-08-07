@@ -53,8 +53,9 @@ export class AuthController {
   @Post('/reset-password')
   @UsePipes(ValidationPipe)
   async resetPassword(
-    @Body() email: ResetPasswordDto
+    @Body() email: ResetPasswordDto,
+    @Res() res: Response
   ): Promise<any> {
-    return this.authService.resetPassword( email);
+    return this.authService.resetPassword( email, res);
   }
 }

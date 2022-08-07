@@ -6,6 +6,7 @@ interface confirmMail{
   userId: string,
   tokenId: string
 }
+type resetPwdMail = confirmMail;
 
 interface Mail{
   email: string;
@@ -20,6 +21,10 @@ export class MailService {
   }
 
   async gratyMail(to: string, subject: string, template: string, context: Mail):Promise<any> {
+    return this.mailService.sendMail({ to, subject, template, context, });
+  }
+
+  async resetPwdMail(to: string, subject: string, template: string, context: resetPwdMail):Promise<any> {
     return this.mailService.sendMail({ to, subject, template, context, });
   }
 }

@@ -1,4 +1,4 @@
-import { forwardRef, Inject, Injectable, } from '@nestjs/common';
+import { forwardRef, Inject, Injectable, NotFoundException, } from '@nestjs/common';
 import { LoginUserDto, } from './dto/login.dto';
 import { Response, }from 'express';
 import { User, } from '../user/entities/user.entity';
@@ -8,6 +8,7 @@ import { v4 as uuid, } from 'uuid';
 import { config, } from 'src/app.utils';
 import { PasswordUserDto, } from './dto/set-password.dto';
 import { MailService, } from '../mail/mail.service';
+import { ResetPasswordDto, } from './dto/reset-password.dto';
 
 @Injectable()
 export class AuthService {
@@ -121,7 +122,6 @@ export class AuthService {
     try {
      
       const userUpdate = await User.findOneBy({ id: user.id, } );
-      console.log(pwd);
       if (!userUpdate) {
         return res.redirect('http://localhost:3000/bad-request');
       }
@@ -150,5 +150,33 @@ export class AuthService {
     catch (err) {
       return res.json({ error: err.message, });
     }
+  }
+
+  async resetPassword( email:ResetPasswordDto, res: Response) {
+     
+    const userResetPwd = await User.findOneBy({ email: email.email, } );
+    console.log(userResetPwd);
+    if (!userResetPwd) {
+      throw new NotFoundException(`${email.email} nie znajduję się w naszym systemie.`);
+    }
+
+    userResetPwd.pwdHash = uuid();
+    userResetPwd.isActive = false;
+    userResetPwd.currentTokenId = null;
+
+    await userResetPwd.save();
+    try {
+      await this.mailService.resetPwdMail(
+        userResetPwd.email, 'Witaj w aplikacji HH 17! Potwierdz Email', './resetPwd', {
+          role: 'Użytkowniku',
+          userId: userResetPwd.id,
+          tokenId: userResetPwd.currentTokenId,
+        });
+    }
+    catch (error) {
+      console.error(error);
+    }
+
+    return res.json({ msg : true, });
   }
 }
