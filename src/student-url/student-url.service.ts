@@ -1,4 +1,3 @@
-import { StudentUrlEntity, } from './../interface/student-url';
 import { createStudentUrlDto, } from './dto/create-student-url.dto';
 import { Injectable, } from '@nestjs/common';
 import { User, } from '../user/entities/user.entity';
@@ -8,14 +7,18 @@ import { Student, } from '../student/entities/student.entity';
 @Injectable()
 export class StudentUrlService {
 
-  async addStudentUrl(url: createStudentUrlDto, userRole:User): Promise<StudentUrlEntity> {
-    
-    const newStudentUrl = new StudentUrl();
-    newStudentUrl.url = url.url;
-    newStudentUrl.createdBy = userRole.id;
-    newStudentUrl.student = await new Student();
-
-    await newStudentUrl.save();
-    return newStudentUrl;
+  async addStudentUrl(studentUrl: createStudentUrlDto, userRole: User)/*: Promise<StudentUrlEntity[]>*/ {
+    const { urls, studentId, } = studentUrl;
+    const urlArr = [];
+    for await (const url of urls) {
+      const newStudentUrl = new StudentUrl();
+      newStudentUrl.url = url;
+      newStudentUrl.createdBy = userRole.id;
+      newStudentUrl.student = await Student.findOneBy({ id: studentId, });
+      console.log(url);
+      await newStudentUrl.save();
+      urlArr.push(newStudentUrl);
+    }
+    return urlArr;
   }
 }

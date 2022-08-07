@@ -40,7 +40,7 @@ export class Student extends BaseEntity{
     studenturl.student
 )
 @JoinColumn()
-  idStudent: StudentUrl[];
+  bonusProjectUrls: StudentUrl[];
 
 // TODO: Dodać Relacje ManyToOne z student_urls
 }

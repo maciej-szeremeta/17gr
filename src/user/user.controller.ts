@@ -52,7 +52,7 @@ export class UserController {
       new SizeAndTypeFilePipe({ size: 1000, type: 'csv', })
     ) files: MulterDiskUploadFiles,
     @UserObj() user: User
-  ): Promise<StudentImportRes> {
+  )/*: Promise<StudentImportRes>*/ {
     return this.userService.importStudent( user, files);
   }
 }

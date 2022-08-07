@@ -1,4 +1,4 @@
-import { IsNumber, Min, Max, IsOptional, IsNotEmpty, IsString, } from 'class-validator';
+import { IsNumber, Min, Max, IsOptional, IsNotEmpty, IsString, IsArray, } from 'class-validator';
 import { config, } from '../../app.utils';
 
 export class CreateStudentDto{
@@ -25,6 +25,10 @@ export class CreateStudentDto{
   @Min(0, { message: config.messageValid.numberMin[ config.languages ](0, 'teamProjectDegree'), })
   @Max(5, { message: config.messageValid.numberMax[ config.languages ](5, 'teamProjectDegree'), })
     teamProjectDegree: number;
+  
+  @IsOptional()
+  @IsArray()
+    bonusProjectUrls:string[];
 
   @IsNotEmpty({ message:config.messageValid.notEmpty[ config.languages ]('user'), })
   @IsString({ message: config.messageValid.string[ config.languages ], })

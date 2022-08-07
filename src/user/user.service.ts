@@ -111,10 +111,10 @@ export class UserService {
     return { id: user.id, email:user.email, fullName, company, maxReservedStudents, };
   };
 
-  async importStudent( userRole: User, files: MulterDiskUploadFiles): Promise<StudentImportRes> {
+  async importStudent( userRole: User, files: MulterDiskUploadFiles)/*: Promise<StudentImportRes>*/ {
     const csvFile = files?.csv?.[ 0 ] ?? null;
     try {
-      const respS = [];
+      const StudentRes = [];
 
       // Wykonanie kodu z pol textowych
       if (csvFile) {
@@ -124,7 +124,7 @@ export class UserService {
           delimiter: ';',
           ignoreEmpty: true,
         }).fromFile(csvFile.path);
-
+        console.log(jsonData);
         const conflictEmails = [];
         for await (const { email, } of jsonData) { 
           const user = await User.findOneBy({ email, });
@@ -154,7 +154,7 @@ export class UserService {
 
           const student:CreateStudentDto = { ...newUser, user: newUsers.id, };
           const registerStudent = await this.studentService.addStudent(student, userRole);
-          respS.push(registerStudent);
+          StudentRes.push(registerStudent);
           try {
             await this.mailService.confirmMail(
               newUser.email, 'Witaj Kursancie w aplikacji HH 17! Potwierdz Email', './confirm', {
@@ -168,7 +168,7 @@ export class UserService {
           }
         }
       }
-      return respS;
+      return this.filterStudent(StudentRes);
     }
     catch (err) {
       try {
@@ -186,9 +186,14 @@ export class UserService {
 
   };
 
-  // filterStudent(student: StudentEntity):StudentRegisterRes{
-  //   const { user, fullName, company, maxReservedStudents, }=hr;
-  //   return { id: user.id, email:user.email, fullName, company, maxReservedStudents, };
-  // };
+  filterStudent(student){
+    const studentArr =student.map(student => {
+      const { user, courseCompletion, courseEngagement, projectDegree, teamProjectDegree, bonusProjectUrls, } = student;
+      const url:string[] = bonusProjectUrls.map((bonusProjectUrl: { url: string; }):string => 
+        bonusProjectUrl.url);
+      return { id: user.id, email: user.email, courseCompletion, courseEngagement, projectDegree, teamProjectDegree, bonusProjectUrls:url, };
+    });
+    return studentArr;
+  };
 
 }

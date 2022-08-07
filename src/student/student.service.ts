@@ -1,12 +1,22 @@
-import { Injectable, } from '@nestjs/common';
+import { forwardRef, Inject, Injectable, } from '@nestjs/common';
+import { createStudentUrlDto, } from '../student-url/dto/create-student-url.dto';
 import { StudentEntity, } from '../interface/student';
 import { User, } from '../user/entities/user.entity';
 import { CreateStudentDto, } from './dto/create-student.dto';
 import { Student, } from './entities/student.entity';
+import { StudentUrlService, } from '../student-url/student-url.service';
 
 @Injectable()
 export class StudentService {
-  async addStudent(student: CreateStudentDto, userRole:User): Promise<StudentEntity> {
+  constructor(
+    @Inject(forwardRef(() => 
+      StudentUrlService)
+    )
+    private studentUrlService: StudentUrlService
+
+  ) {}
+
+  async addStudent(student: CreateStudentDto, userRole: User): Promise<StudentEntity> {
     
     const registerStudent = new Student();
     registerStudent.courseCompletion = student.courseCompletion;
@@ -15,6 +25,9 @@ export class StudentService {
     registerStudent.teamProjectDegree = student.teamProjectDegree;
     registerStudent.createdBy = userRole.id;
     registerStudent.user = await User.findOneBy({ id: student.user, });
+    await registerStudent.save();
+    const studentUrl: createStudentUrlDto = { urls: student.bonusProjectUrls, studentId: registerStudent.id, };
+    registerStudent.bonusProjectUrls = await this.studentUrlService.addStudentUrl(studentUrl, userRole);
     await registerStudent.save();
     return registerStudent;
   }

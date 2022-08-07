@@ -1,6 +1,10 @@
 import { Student, } from '../student/entities/student.entity';
 
-export interface StudentUrlEntity{
+export type StudentUrlEntity = {
+   id?: string;
    url: string;
-   student?:Student
+   createdBy: string;
+   studentId?:Student
 }
+
+export type StudentImportRes = StudentUrlEntity[] | null;
