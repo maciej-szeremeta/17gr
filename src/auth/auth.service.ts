@@ -1,14 +1,23 @@
-import { Injectable, } from '@nestjs/common';
+import { forwardRef, Inject, Injectable, } from '@nestjs/common';
 import { LoginUserDto, } from './dto/login.dto';
 import { Response, }from 'express';
 import { User, } from '../user/entities/user.entity';
-import { comparePwd, } from '../utils/hash-pwd';
+import { comparePwd, hashPwd, } from '../utils/hash-pwd';
 import { sign, } from 'jsonwebtoken';
 import { v4 as uuid, } from 'uuid';
 import { config, } from 'src/app.utils';
+import { PasswordUserDto, } from './dto/set-password.dto';
+import { MailService, } from '../mail/mail.service';
 
 @Injectable()
 export class AuthService {
+
+  constructor(
+    @Inject(forwardRef(() => 
+      MailService)
+    )
+    private mailService: MailService
+  ) {}
 
   private createToken(currentTokenId: string): { accessToken: string, expiresIn: number }{
     const payload = { id: currentTokenId, };
@@ -20,7 +29,7 @@ export class AuthService {
   }
 
   private async generateToken(user: User):Promise<string> {
-    let token;
+    let token: string | PromiseLike<string>;
     let userWithThisToken = null;
     do {
       token = uuid();
@@ -37,9 +46,12 @@ export class AuthService {
      
       const user = (await User.find({ where: { email: req.email, }, relations: [ 'role', ], }))[ 0 ];
       
-      const validPwd = await comparePwd (
-        req.pwd, user.pwdHash
-      );
+      let validPwd: boolean;
+      if (user) {
+        validPwd = await comparePwd (
+          req.pwd, user.pwdHash
+        );
+      }
 
       if (!user || !validPwd) {
         return res.json({ error: config.messageErr.loginInvalidData[ config.languages ], });
@@ -78,6 +90,65 @@ export class AuthService {
     }
     catch (err) {
       return res.json({ error:err.message, });
+    }
+  }
+
+  async active(userId:string, tokenId: string, res: Response) {
+    try {
+     
+      const user = (await User.find({ where: { id: userId, pwdHash:tokenId, }, relations: [ 'role', ], }))[ 0 ];
+
+      if (!user) {
+        return res.redirect('http://localhost:3000/bad-request');
+      }
+
+      const token = this.createToken(await this.generateToken(user));
+      return res
+        .cookie('jwt', token.accessToken, {
+          secure: config.configCookie.secure,
+          domain: config.configCookie.domain,
+          path:config.configCookie.path,
+          httpOnly: config.configCookie.httpOnly,
+        })
+        .redirect('http://localhost:3000/password');
+    }
+    catch (err) {
+      return res.json({ error: err.message, });
+    }
+  }
+
+  async setPassword( pwd: PasswordUserDto, res:Response, user: User) {
+    try {
+     
+      const userUpdate = await User.findOneBy({ id: user.id, } );
+      console.log(pwd);
+      if (!userUpdate) {
+        return res.redirect('http://localhost:3000/bad-request');
+      }
+
+      userUpdate.pwdHash = await hashPwd(pwd.pwd);
+      userUpdate.isActive = true;
+      userUpdate.currentTokenId = null;
+
+      await userUpdate.save();
+      try {
+        await this.mailService.gratyMail(
+          userUpdate.email, 'Witaj Użytkowniku w aplikacji HH 17! Potwierdz Email', './graty', {
+            email: userUpdate.email,
+          });
+      }
+      catch (error) {
+        console.error(error);
+      }
+
+      return res.clearCookie('jwt', {
+        secure: config.configCookie.secure,
+        domain: config.configCookie.domain,
+        httpOnly: true,
+      }).redirect('http://localhost:3000/login');
+    }
+    catch (err) {
+      return res.json({ error: err.message, });
     }
   }
 }

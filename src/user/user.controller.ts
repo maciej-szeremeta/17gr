@@ -12,7 +12,6 @@ import { RolesGuard, } from '../guards/roles.guard';
 import { UserObj, } from '../decorators/user-obj.decorator';
 import { User, } from './entities/user.entity';
 import { HrRegisterRes, } from '../interface/hr';
-import { StudentImportRes, } from '../interface/student';
 import { MulterDiskUploadFiles, } from '../interface/file';
 import { multerStorage, storageDir, } from '../utils/storage';
 import { SizeAndTypeFilePipe, } from '../pipes/SizeAndTypeValidator.pipe';
