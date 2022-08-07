@@ -1,10 +1,13 @@
+import { StudentUrl, } from '../student-url/entities/student-url.entity';
 import { Student, } from '../student/entities/student.entity';
 
 export type StudentUrlEntity = {
-   id?: string;
+   id: string;
    url: string;
-   createdBy: string;
+   createdBy: Date;
+   createdAt: Date;
+   updatedAt: string;
    studentId?:Student
 }
 
-export type StudentImportRes = StudentUrlEntity[] | null;
+export type StudentUrlImportRes = StudentUrl[];

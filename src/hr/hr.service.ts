@@ -7,7 +7,7 @@ import { CreateHrDto, } from './dto/create-hr.dto';
 @Injectable()
 export class HrService {
 
-  async addHr(hr: CreateHrDto, userRole:User): Promise<HrEntity> {
+  async addHr(hr: CreateHrDto, userRole:User): Promise<Hr> {
     
     const registerHr = new Hr();
     registerHr.fullName = hr.fullName;

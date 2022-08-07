@@ -111,7 +111,7 @@ export class UserService {
     return { id: user.id, email:user.email, fullName, company, maxReservedStudents, };
   };
 
-  async importStudent( userRole: User, files: MulterDiskUploadFiles)/*: Promise<StudentImportRes>*/ {
+  async importStudent( userRole: User, files: MulterDiskUploadFiles):Promise<User> {
     const csvFile = files?.csv?.[ 0 ] ?? null;
     try {
       const StudentRes = [];

@@ -27,7 +27,7 @@ export class Student extends BaseEntity{
   createdAt: Date;
    
 @UpdateDateColumn()
-  updateAt: Date;
+  updatedAt: Date;
    
 @OneToOne(() => 
   User)
@@ -37,7 +37,7 @@ export class Student extends BaseEntity{
 @OneToMany(
   () => 
     StudentUrl, studenturl => 
-    studenturl.student
+    studenturl.studentId
 )
 @JoinColumn()
   bonusProjectUrls: StudentUrl[];

@@ -1,10 +1,10 @@
 import { forwardRef, Inject, Injectable, } from '@nestjs/common';
 import { createStudentUrlDto, } from '../student-url/dto/create-student-url.dto';
-import { StudentEntity, } from '../interface/student';
 import { User, } from '../user/entities/user.entity';
 import { CreateStudentDto, } from './dto/create-student.dto';
 import { Student, } from './entities/student.entity';
 import { StudentUrlService, } from '../student-url/student-url.service';
+import { StudentImportRes, } from '../interface/student';
 
 @Injectable()
 export class StudentService {
@@ -16,7 +16,7 @@ export class StudentService {
 
   ) {}
 
-  async addStudent(student: CreateStudentDto, userRole: User): Promise<StudentEntity> {
+  async addStudent(student: CreateStudentDto, userRole: User): Promise<StudentImportRes> {
     
     const registerStudent = new Student();
     registerStudent.courseCompletion = student.courseCompletion;
