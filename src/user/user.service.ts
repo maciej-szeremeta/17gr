@@ -10,7 +10,6 @@ import { MailService, } from '../mail/mail.service';
 import { v4 as uuid, }from 'uuid';
 import { HrService, } from '../hr/hr.service';
 import { HrEntity, HrRegisterRes, } from '../interface/hr';
-import { StudentImportRes, } from '../interface/student';
 import { MulterDiskUploadFiles, } from '../interface/file';
 import { unlink, } from 'fs';
 import { storageDir, } from '../utils/storage';
