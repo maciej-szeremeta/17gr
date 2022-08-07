@@ -1,5 +1,6 @@
-import { Hr, } from '../../hr/entities/hr.entity';
 import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn, } from 'typeorm';
+import { Student, } from '../../student/entities/student.entity';
+import { Hr, } from '../../hr/entities/hr.entity';
 import { UserRole, } from '../../user-role/entities/user-role.entity';
 
 @Entity()
@@ -46,5 +47,9 @@ export class User extends BaseEntity{
 
 @OneToOne(() => 
   Hr)
-  hrId:Hr;
+  hrId: Hr;
+
+@OneToOne(() => 
+  Student)
+  studentId:Student;
 }

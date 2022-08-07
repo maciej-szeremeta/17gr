@@ -1,11 +1,7 @@
-import { IsNotEmpty, IsString, IsEmail, IsNumber, Min, Max, IsOptional, } from 'class-validator';
+import { IsNotEmpty, IsString, IsNumber, Min, Max, IsOptional, } from 'class-validator';
 import { config, } from '../../app.utils';
 
-export class RegisterHrDto{
-  @IsNotEmpty({ message: config.messageValid.notEmpty[ config.languages ]('email'), })
-  @IsString({ message: config.messageValid.string[ config.languages ], })
-  @IsEmail({ message: config.messageValid.email[ config.languages ], })
-    email: string;
+export class CreateHrDto{
 
   @IsNotEmpty({ message: config.messageValid.notEmpty[ config.languages ]('fullName'), })
   @IsString({ message: config.messageValid.string[ config.languages ], })
@@ -20,4 +16,8 @@ export class RegisterHrDto{
   @Min(1, { message: config.messageValid.numberMin[ config.languages ](1, 'maxReservedStudents'), })
   @Max(999, { message: config.messageValid.numberMax[ config.languages ](999, 'maxReservedStudents'), })
     maxReservedStudents: number;
+
+  @IsNotEmpty({ message:config.messageValid.notEmpty[ config.languages ]('user'), })
+  @IsString({ message: config.messageValid.string[ config.languages ], })
+    user: string;
 }

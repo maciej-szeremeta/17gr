@@ -8,8 +8,10 @@ export const config = {
   },
   messageValid: {
     notEmpty: [
-      'Pole nie może być puste.',
-      'The field cannot be empty.', ],
+      (name: string) => 
+        `${name} nie może być pusty`,
+      (name: string) => 
+        `The ${name} field cannot be empty`, ],
     length: [
       'Nie odpowiednia długość pola.',
       'Field length not appropriate.', ],
@@ -32,8 +34,8 @@ export const config = {
       (max:number, name:string) => 
         `The ${name} cannot be greater than ${max}`, ],
     enum: [
-      'Nie takiego typu konta.',
-      'Must contain an option from the list.', ],
+      'Brak takiego typu konta.',
+      'No such account type.', ],
     email: [
       'Proszę wpisać email.',
       'Please enter your email.', ],
@@ -45,15 +47,33 @@ export const config = {
       'The selected name is already taken. Please choose another name', ],
   },
   messageErr: {
-    login: [
-      'Błędne dane logowania!',
+    loginInvalidData: [
+      'Nieprawidłowe dane logowania!',
       'Invalid login data!', ],
+    loginIsActive: [
+      (email:string) => 
+        `Sprawdź skrzynkę mailowa ${email}, na którą wysłaliśmy link aktywacyjny.`,
+      (email:string) => 
+        `Please check your ${email} mailbox to which we sent the activation link.`,
+    ],
+    regiserConflictMail: [
+      (emails:string[]|string) => 
+        `${emails} już istnieje w bazie, wybierz inny email.`,
+      (emails:string[]|string) => 
+        `${emails} already exists in the database, please select another email.`,
+    ],
   },
   secretKeys: {
     jwt: 'tajemniczy kluczyk',
   },
-  configDomain:{
-    domena: 'localhost',
+  configCookie:{
+    domain: 'localhost',
     secure: false,
+    path: '/',
+    httpOnly:true,
+  },
+  configCors:{
+    credentials: true,
+    origin:'http://localhost:3000',
   },
 };

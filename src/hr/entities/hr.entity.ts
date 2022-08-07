@@ -30,6 +30,5 @@ export class Hr extends BaseEntity{
   @JoinColumn()
   user:User;
 
-// TODO: Dodać Relacje OnetoOne z user
 // TODO: Dodać Relacje ManyToMany z student
 }
