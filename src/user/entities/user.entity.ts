@@ -2,6 +2,7 @@ import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, On
 import { Student, } from '../../student/entities/student.entity';
 import { Hr, } from '../../hr/entities/hr.entity';
 import { UserRole, } from '../../user-role/entities/user-role.entity';
+import { StudentProfile, } from '../../student-profile/entities/student-profile.entity';
 
 @Entity()
 export class User extends BaseEntity{
@@ -51,5 +52,9 @@ export class User extends BaseEntity{
 
 @OneToOne(() => 
   Student)
-  studentId:Student;
+  studentId: Student;
+
+@OneToOne(() => 
+  StudentProfile)
+  studentProfileId:StudentProfile;
 }

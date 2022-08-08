@@ -1,5 +1,6 @@
 import { User, } from '../../user/entities/user.entity';
-import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn, } from 'typeorm';
+import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, JoinTable, ManyToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn, } from 'typeorm';
+import { Student, } from '../../student/entities/student.entity';
 
 @Entity()
 export class Hr extends BaseEntity{
@@ -30,5 +31,4 @@ export class Hr extends BaseEntity{
   @JoinColumn()
   user:User;
 
-// TODO: Dodać Relacje ManyToMany z student
 }

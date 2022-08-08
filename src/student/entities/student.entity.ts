@@ -1,7 +1,8 @@
 import { StudentProfile, } from '../../student-profile/entities/student-profile.entity';
 import { User, } from '../../user/entities/user.entity';
-import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn, } from 'typeorm';
+import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, JoinTable, ManyToMany, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn, } from 'typeorm';
 import { StudentUrl, } from 'src/student-url/entities/student-url.entity';
+import { Hr, } from '../../hr/entities/hr.entity';
 
 @Entity()
 export class Student extends BaseEntity{
@@ -47,5 +48,12 @@ export class Student extends BaseEntity{
   StudentProfile)
   studentProfileId: StudentProfile;
 
-// TODO: Dodać Relacje ManyToOne z student_urls
+  // @ManyToMany(
+  //   () => 
+  //     Hr, entity => 
+  //     entity.student
+  // )
+  //   @JoinTable()
+  //   hr: Hr[];
+
 }

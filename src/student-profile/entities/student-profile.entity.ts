@@ -1,7 +1,7 @@
 import { StudentProfilePortfolioUrl, } from './../../student-profile-portfolio-url/entities/student-profile-portfolio-url.entity';
-import { Student, } from 'src/student/entities/student.entity';
 import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn, } from 'typeorm';
 import { StudentProfileProjectUrl, } from '../../student-profile-project-url/entities/student-profile-porject-url.entity';
+import { User, } from '../../user/entities/user.entity';
 
 export enum ExpectedTypeWork {
   NAMIEJSCU = 'Na miejscu',
@@ -84,9 +84,9 @@ export class StudentProfile extends BaseEntity{
   updatedAt: Date;
    
 @OneToOne(() => 
-  Student)
+  User)
 @JoinColumn()
-  studentId: Student;
+  user: User;
   
 @OneToMany(
   () => 
