@@ -6,6 +6,6 @@ export class createStudentUrlDto{
      urls: string[];
 
   @IsNotEmpty({ message:config.messageValid.notEmpty[ config.languages ]('student'), })
-  @IsString({ message: config.messageValid.string[ config.languages ], })
+  @IsString({ message: config.messageValid.string[ config.languages ]( 'student'), })
     studentId: string;
 }

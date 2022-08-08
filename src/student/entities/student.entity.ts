@@ -1,7 +1,7 @@
 import { StudentProfile, } from '../../student-profile/entities/student-profile.entity';
 import { User, } from '../../user/entities/user.entity';
-import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, JoinTable, ManyToMany, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn, } from 'typeorm';
-import { StudentUrl, } from 'src/student-url/entities/student-url.entity';
+import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn, } from 'typeorm';
+import { StudentUrl, } from '../../student-url/entities/student-url.entity';
 
 @Entity()
 export class Student extends BaseEntity{

@@ -2,22 +2,8 @@ import { StudentProfilePortfolioUrl, } from './../../student-profile-portfolio-u
 import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, JoinTable, ManyToMany, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn, } from 'typeorm';
 import { StudentProfileProjectUrl, } from '../../student-profile-project-url/entities/student-profile-porject-url.entity';
 import { User, } from '../../user/entities/user.entity';
-import { Hr } from 'src/hr/entities/hr.entity';
-
-export enum ExpectedTypeWork {
-  NAMIEJSCU = 'Na miejscu',
-  GOTOWOSCDOPRZEPROWADZKI = 'Gotowość do przeprowadzki',
-  WYLACZNIEZDALNIE = 'Wyłącznie zdalnie',
-  HYBRYDOWO = 'Hybrydowo',
-  BEZZNACZENIA = 'Bez znaczenia'
-}
-
-export enum ExpectedContractType {
-  TYLKOUOP = 'Tylko UoP',
-  MOZLIWEB2B = 'Możliwe B2B',
-  MOZLIWEUZUOD = 'Możliwe UZ/UoD',
-  BRAKPREFERENCJI = 'Brak preferencji '
-}
+import { Hr, } from '../../hr/entities/hr.entity';
+import { ExpectedContractType, ExpectedTypeWork, StudentStatus, } from '../../interface/student-profile';
 
 @Entity()
 export class StudentProfile extends BaseEntity{
@@ -61,19 +47,26 @@ export class StudentProfile extends BaseEntity{
   expectedSalary: number;
    
 @Column({ type:'tinyint', default:0, })
-  canTakeApprenticeship: number;
+  canTakeApprenticeship: number | boolean;
    
 @Column({ type:'int', default:0, scale:9, })
   monthsOfCommercialExp: number;
    
 @Column({ type:'longtext', nullable:true, default:null, })
-  education: string;
+  education: string | null;
 
 @Column({ type:'longtext', nullable:true, default:null, })
-  workExperience: string;
+  workExperience: string | null;
    
 @Column({ type:'longtext', nullable:true, default:null, })
-  courses: string;
+  courses: string | null;
+
+@Column({
+  type: 'enum',
+  enum: StudentStatus,
+  default: StudentStatus.DOSTEPNY,
+})
+  studentStatus: string;
   
 @Column({ length:36, })
   createdBy: string | null;

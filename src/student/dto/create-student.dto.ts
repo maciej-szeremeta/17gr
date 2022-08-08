@@ -31,6 +31,6 @@ export class CreateStudentDto{
     bonusProjectUrls:string[];
 
   @IsNotEmpty({ message:config.messageValid.notEmpty[ config.languages ]('user'), })
-  @IsString({ message: config.messageValid.string[ config.languages ], })
+  @IsString({ message: config.messageValid.string[ config.languages ]( 'user'), })
     user: string;
 }
