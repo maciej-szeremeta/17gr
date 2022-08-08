@@ -1,7 +1,8 @@
 import { StudentProfilePortfolioUrl, } from './../../student-profile-portfolio-url/entities/student-profile-portfolio-url.entity';
-import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn, } from 'typeorm';
+import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, JoinTable, ManyToMany, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn, } from 'typeorm';
 import { StudentProfileProjectUrl, } from '../../student-profile-project-url/entities/student-profile-porject-url.entity';
 import { User, } from '../../user/entities/user.entity';
+import { Hr } from 'src/hr/entities/hr.entity';
 
 export enum ExpectedTypeWork {
   NAMIEJSCU = 'Na miejscu',
@@ -101,5 +102,13 @@ export class StudentProfile extends BaseEntity{
     studentProfileProjectUrl.studentProfile
 )
   studentProfileProjectUrl: StudentProfileProjectUrl[];
+
+  @ManyToMany(
+    () => 
+      Hr, entity => 
+      entity.student
+  )
+    @JoinTable()
+    hr: Hr[];
 
 }

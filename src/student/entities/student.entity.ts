@@ -2,7 +2,6 @@ import { StudentProfile, } from '../../student-profile/entities/student-profile.
 import { User, } from '../../user/entities/user.entity';
 import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, JoinTable, ManyToMany, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn, } from 'typeorm';
 import { StudentUrl, } from 'src/student-url/entities/student-url.entity';
-import { Hr, } from '../../hr/entities/hr.entity';
 
 @Entity()
 export class Student extends BaseEntity{
@@ -47,13 +46,5 @@ export class Student extends BaseEntity{
 @OneToOne(() => 
   StudentProfile)
   studentProfileId: StudentProfile;
-
-  // @ManyToMany(
-  //   () => 
-  //     Hr, entity => 
-  //     entity.student
-  // )
-  //   @JoinTable()
-  //   hr: Hr[];
 
 }

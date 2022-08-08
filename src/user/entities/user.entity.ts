@@ -56,5 +56,6 @@ export class User extends BaseEntity{
 
 @OneToOne(() => 
   StudentProfile)
-  studentProfileId:StudentProfile;
+  studentProfileId: StudentProfile;
+
 }

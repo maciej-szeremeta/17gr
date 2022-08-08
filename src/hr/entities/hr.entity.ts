@@ -1,6 +1,6 @@
 import { User, } from '../../user/entities/user.entity';
-import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, JoinTable, ManyToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn, } from 'typeorm';
-import { Student, } from '../../student/entities/student.entity';
+import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, ManyToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn, } from 'typeorm';
+import { StudentProfile, } from '../../student-profile/entities/student-profile.entity';
 
 @Entity()
 export class Hr extends BaseEntity{
@@ -29,6 +29,13 @@ export class Hr extends BaseEntity{
 @OneToOne(() => 
   User)
   @JoinColumn()
-  user:User;
+  user: User;
+  
+@ManyToMany(
+  () => 
+    StudentProfile, (entity: { hr: any; }) => 
+    entity.hr
+)
+  student: StudentProfile[];
 
 }
