@@ -15,6 +15,7 @@ import { HrRegisterRes, } from '../interface/hr';
 import { MulterDiskUploadFiles, } from '../interface/file';
 import { multerStorage, storageDir, } from '../utils/storage';
 import { SizeAndTypeFilePipe, } from '../pipes/SizeAndTypeValidator.pipe';
+import { StudentImportRes, } from '../interface/student';
 
 @Controller('/user')
 export class UserController {
@@ -51,7 +52,7 @@ export class UserController {
       new SizeAndTypeFilePipe({ size: 1000, type: 'csv', })
     ) files: MulterDiskUploadFiles,
     @UserObj() user: User
-  )/*: Promise<StudentImportRes>*/ {
+  ): Promise<StudentImportRes> {
     return this.userService.importStudent( user, files);
   }
 }

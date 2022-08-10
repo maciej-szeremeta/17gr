@@ -18,6 +18,7 @@ import * as csv from 'csvtojson';
 import { config, } from '../app.utils';
 import { StudentService, } from '../student/student.service';
 import { CreateStudentDto, } from '../student/dto/create-student.dto';
+import { StudentImportRes, } from '../interface/student';
 
 @Injectable()
 export class UserService {
@@ -110,7 +111,7 @@ export class UserService {
     return { id: user.id, email:user.email, fullName, company, maxReservedStudents, };
   };
 
-  async importStudent( userRole: User, files: MulterDiskUploadFiles):Promise<User> {
+  async importStudent( userRole: User, files: MulterDiskUploadFiles):Promise<StudentImportRes> {
     const csvFile = files?.csv?.[ 0 ] ?? null;
     try {
       const StudentRes = [];

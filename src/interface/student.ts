@@ -1,4 +1,4 @@
-import { StudentUrl, } from 'src/student-url/entities/student-url.entity';
+import { StudentUrl, } from '../student-url/entities/student-url.entity';
 import { Student, } from '../student/entities/student.entity';
 import { User, } from '../user/entities/user.entity';
 
