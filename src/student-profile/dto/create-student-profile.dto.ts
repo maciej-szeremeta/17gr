@@ -1,9 +1,9 @@
 import { ArrayHasLinks, } from './validators/arrayHasLinks.validator';
-import { IsNumber, Min, Max, IsOptional, IsNotEmpty, IsString, IsArray, IsPhoneNumber, Length, IsEnum, IsBoolean, ArrayMaxSize, Validate, } from 'class-validator';
+import { IsNumber, Min, Max, IsOptional, IsNotEmpty, IsString, IsArray, Length, IsEnum, IsBoolean, ArrayMaxSize, Validate, } from 'class-validator';
 import { PrimaryGeneratedColumn, } from 'typeorm';
 import { config, } from '../../app.utils';
 import { ExpectedContractType, ExpectedTypeWork, } from '../../interface/student-profile';
-import { isGitHubUser } from './validators/gitHubUser.validator';
+import { isGitHubUser, } from './validators/gitHubUser.validator';
 
 export class CreateStudentProfileDto {
 
@@ -27,7 +27,7 @@ export class CreateStudentProfileDto {
      lastName: string;
    
    @IsNotEmpty({ message: config.messageValid.notEmpty[ config.languages ]('githubUsername'), })
-   @IsString({ message: config.messageValid.string[config.languages]('githubUsername'), })
+   @IsString({ message: config.messageValid.string[ config.languages ]('githubUsername'), })
    @Validate(isGitHubUser, { message:'githubUsername nie istnieje.', })
      githubUsername: string;
      
