@@ -5,7 +5,7 @@ import { NestExpressApplication, } from '@nestjs/platform-express';
 import * as cookieParser from 'cookie-parser';
 import * as morgan from 'morgan';
 import rateLimit from 'express-rate-limit';
-import { config } from './app.utils';
+import { config, } from './app.utils';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);

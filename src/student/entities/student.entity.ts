@@ -1,6 +1,7 @@
+import { StudentProfile, } from '../../student-profile/entities/student-profile.entity';
 import { User, } from '../../user/entities/user.entity';
 import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn, } from 'typeorm';
-import { StudentUrl, } from 'src/student-url/entities/student-url.entity';
+import { StudentUrl, } from '../../student-url/entities/student-url.entity';
 
 @Entity()
 export class Student extends BaseEntity{
@@ -42,5 +43,8 @@ export class Student extends BaseEntity{
 @JoinColumn()
   bonusProjectUrls: StudentUrl[];
 
-// TODO: Dodać Relacje ManyToOne z student_urls
+@OneToOne(() => 
+  StudentProfile)
+  studentProfileId: StudentProfile;
+
 }

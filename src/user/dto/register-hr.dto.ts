@@ -3,16 +3,16 @@ import { config, } from '../../app.utils';
 
 export class RegisterHrDto{
   @IsNotEmpty({ message: config.messageValid.notEmpty[ config.languages ]('email'), })
-  @IsString({ message: config.messageValid.string[ config.languages ], })
+  @IsString({ message: config.messageValid.string[ config.languages ]( 'email'), })
   @IsEmail({ message: config.messageValid.email[ config.languages ], })
     email: string;
 
   @IsNotEmpty({ message: config.messageValid.notEmpty[ config.languages ]('fullName'), })
-  @IsString({ message: config.messageValid.string[ config.languages ], })
+  @IsString({ message: config.messageValid.string[ config.languages ]( 'fullName'), })
     fullName: string;
 
   @IsNotEmpty({ message:config.messageValid.notEmpty[ config.languages ]('company'), })
-  @IsString({ message: config.messageValid.string[ config.languages ], })
+  @IsString({ message: config.messageValid.string[ config.languages ]( 'company'), })
     company: string;
 
   @IsOptional()
