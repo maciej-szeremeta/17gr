@@ -1,7 +1,7 @@
 import { StudentProfile, } from './entities/student-profile.entity';
 import { ConflictException, Injectable, } from '@nestjs/common';
 import { CreateUserProfileRes, } from '../interface/student-profile';
-import { User, } from 'src/user/entities/user.entity';
+import { User, } from '../user/entities/user.entity';
 import { CreateStudentProfileDto, } from './dto/create-student-profile.dto';
 import { config, } from '../app.utils';
 
