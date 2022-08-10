@@ -12,7 +12,7 @@ export class StudentProfile extends BaseEntity{
   id: string;
 
 @Column({ nullable:true, default: null, })
-  tel: number | null;
+  tel: string | null;
 
 @Column({ length:57, })
   firstName: string;
@@ -23,7 +23,7 @@ export class StudentProfile extends BaseEntity{
 @Column()
   githubUsername: string;
    
-@Column()
+@Column({ type:'text', })
   bio: string;
 
 @Column({

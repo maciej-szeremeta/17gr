@@ -1,8 +1,9 @@
-import { ArrayHasLinks, } from './validators/arrayHasLinks';
+import { ArrayHasLinks, } from './validators/arrayHasLinks.validator';
 import { IsNumber, Min, Max, IsOptional, IsNotEmpty, IsString, IsArray, IsPhoneNumber, Length, IsEnum, IsBoolean, ArrayMaxSize, Validate, } from 'class-validator';
 import { PrimaryGeneratedColumn, } from 'typeorm';
 import { config, } from '../../app.utils';
 import { ExpectedContractType, ExpectedTypeWork, } from '../../interface/student-profile';
+import { isGitHubUser } from './validators/gitHubUser.validator';
 
 export class CreateStudentProfileDto {
 
@@ -13,7 +14,6 @@ export class CreateStudentProfileDto {
    @IsString({ message: config.messageValid.string[ config.languages ]( 'tel'), })
 
    // @IsPhoneNumber('PL', { message: config.messageValid.phoneNumber[ config.languages ]('Telefon'), })
-   @IsPhoneNumber(undefined, { message: config.messageValid.phoneNumber[ config.languages ]('Telefon'), })
      tel: string | null;
 
    @IsNotEmpty({ message: config.messageValid.notEmpty[ config.languages ]('firstName'), })
@@ -27,7 +27,8 @@ export class CreateStudentProfileDto {
      lastName: string;
    
    @IsNotEmpty({ message: config.messageValid.notEmpty[ config.languages ]('githubUsername'), })
-   @IsString({ message: config.messageValid.string[ config.languages ]( 'githubUsername'), })
+   @IsString({ message: config.messageValid.string[config.languages]('githubUsername'), })
+   @Validate(isGitHubUser, { message:'githubUsername nie istnieje.', })
      githubUsername: string;
      
   @IsOptional()
@@ -43,12 +44,13 @@ export class CreateStudentProfileDto {
      projectUrls:string[];
 
    @IsOptional()
-   @IsString({ message: config.messageValid.string[ config.languages ]( 'bio'), })
+   @IsString({ message: config.messageValid.string[ config.languages ]('bio'), })
+   @Length(0, 1000, { message: config.messageValid.length[ config.languages ](1, 57, 'FirstName'), })
      bio: string;
    
    @IsOptional()
    @IsString({ message: config.messageValid.string[ config.languages ]( 'expectedTypeWork'), })
-   @IsEnum(ExpectedTypeWork, { message: config.messageValid.enum[ config.languages ], })
+   @IsEnum(ExpectedTypeWork, { message: config.messageValid.enum[ config.languages ], always:false, })
      expectedTypeWork: string;
    
    @IsOptional()
@@ -63,7 +65,7 @@ export class CreateStudentProfileDto {
   @IsOptional()
   @IsNumber(undefined, { message: config.messageValid.number[ config.languages ]('ExpectedSalary'), })
   @Min(0, { message: config.messageValid.numberMin[ config.languages ](0, 'ExpectedSalary'), })
-  @Max(9, { message: config.messageValid.numberMax[ config.languages ](9, 'ExpectedSalary'), })
+  @Max(1000000, { message: config.messageValid.numberMax[ config.languages ](1000000, 'ExpectedSalary'), })
     expectedSalary: number;
    
   @IsOptional()
@@ -73,7 +75,7 @@ export class CreateStudentProfileDto {
   @IsOptional()
   @IsNumber(undefined, { message: config.messageValid.number[ config.languages ]('MonthsOfCommercialExp'), })
   @Min(0, { message: config.messageValid.numberMin[ config.languages ](0, 'MonthsOfCommercialExp'), })
-  @Max(9, { message: config.messageValid.numberMax[ config.languages ](5, 'MonthsOfCommercialExp'), })
+  @Max(1000, { message: config.messageValid.numberMax[ config.languages ](1000, 'MonthsOfCommercialExp'), })
     monthsOfCommercialExp: number;
 
   @IsOptional()

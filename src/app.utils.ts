@@ -4,7 +4,8 @@ export const config = {
   // EN - 1
   languages: 0,
   validation: {
-    password: /^(?=.*?[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[#?!@$%^&*-])$/,
+    password: /^(?=.*?[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[#?!@$%^&*-])/,
+    http:/(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/,
   },
   messageValid: {
     notEmpty: [
@@ -71,6 +72,12 @@ export const config = {
         `${emails} już istnieje w bazie, wybierz inny email.`,
       (emails:string[]|string) => 
         `${emails} already exists in the database, please select another email.`,
+    ],
+    idGitHubUser: [
+      (gitHubUser:string) => 
+        `GithubUser ${gitHubUser} już istnieje w bazie.`,
+      (gitHubUser:string[]|string) => 
+        `GithubUser ${gitHubUser} already exists in the database.`,
     ],
   },
   secretKeys: {
