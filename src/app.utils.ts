@@ -1,3 +1,6 @@
+import { COOKIE, CORS, } from './../config/config';
+import { JWT, } from '../config/config';
+
 export const config = {
 
   // PL - 0
@@ -81,16 +84,16 @@ export const config = {
     ],
   },
   secretKeys: {
-    jwt: 'tajemniczy kluczyk',
+    jwt: JWT.SECRET,
   },
   configCookie:{
-    domain: 'localhost',
-    secure: false,
-    path: '/',
-    httpOnly:true,
+    domain: COOKIE.DOMAIN,
+    secure: COOKIE.SECURE,
+    path: COOKIE.PATH,
+    httpOnly:COOKIE.HTTPONLY,
   },
   configCors:{
-    credentials: true,
-    origin:'http://localhost:3000',
+    credentials: CORS.CREDENTIALS,
+    origin:CORS.ORIGIN,
   },
 };
