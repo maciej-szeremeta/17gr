@@ -6,7 +6,7 @@ export const config = {
   port: DB.PORT,
   username: DB.USERNAME,
   password: DB.PASSWORD,
-  database: DB.USERNAME,
+  database: DB.DATABASE,
   entities: [ __dirname + '/**/**.entity{.ts,.js}', ],
   bigNumberStrings: false,
   logging: true,
