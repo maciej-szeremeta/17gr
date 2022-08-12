@@ -1,15 +1,24 @@
 import { StudentProfile, } from './entities/student-profile.entity';
-import { ConflictException, Injectable, } from '@nestjs/common';
+import { ConflictException, forwardRef, Inject, Injectable, } from '@nestjs/common';
 import { CreateUserProfileRes, } from '../interface/student-profile';
 import { User, } from '../user/entities/user.entity';
 import { CreateStudentProfileDto, } from './dto/create-student-profile.dto';
 import { config, } from '../app.utils';
+import { StudentProfilePortfolioUrlService, } from '../student-profile-portfolio-url/student-profile-portfolio-url.service';
+import { createStudentPortfolioUrlDto, } from '../student-profile-portfolio-url/dto/create-student-portfolio-url.dto';
 
 @Injectable()
 export class StudentProfileService {
 
-  async createStudentProfile(createStudentProfile: CreateStudentProfileDto, user: User): Promise<CreateUserProfileRes> { 
+  constructor(
+    @Inject(forwardRef(() => 
+      StudentProfilePortfolioUrlService)
+    )
+    private studentProfilePortfolioUrlService: StudentProfilePortfolioUrlService
 
+  ) {}
+
+  async createStudentProfile(createStudentProfile: CreateStudentProfileDto, userRole: User): Promise<CreateUserProfileRes> { 
     const userItem = await StudentProfile.findOneBy({ githubUsername: createStudentProfile.githubUsername, });
     if (userItem) {
       throw new ConflictException(config.messageErr.idGitHubUser[ config.languages ](createStudentProfile.githubUsername));
@@ -30,8 +39,11 @@ export class StudentProfileService {
     newStudentProfile.education = createStudentProfile.education;
     newStudentProfile.workExperience = createStudentProfile.workExperience;
     newStudentProfile.courses = createStudentProfile.courses;
-    newStudentProfile.user = user;
-    newStudentProfile.createdBy = user.id;
+    newStudentProfile.user = userRole;
+    newStudentProfile.createdBy = userRole.id;
+    await newStudentProfile.save();
+    const studentProfileUrl:createStudentPortfolioUrlDto = { urls: createStudentProfile.portfolioUrls, studentPortfolioId: newStudentProfile.id, };
+    newStudentProfile.studentProfilePortfolioUrl = await this.studentProfilePortfolioUrlService.addStudentPortfolioUrl(studentProfileUrl, userRole);
     await newStudentProfile.save();
     return newStudentProfile;
   }
